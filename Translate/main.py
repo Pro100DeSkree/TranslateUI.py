@@ -10,14 +10,13 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.ui.LineTranslate_1.setMaxLength(34)                  # Ограничение символов в поле ввода 1
-        self.ui.LineTranslate_2.setMaxLength(34)                  # Ограничение символов в поле ввода 2
-        self.ui.Translate.clicked.connect(self.TranslateClicked)  # Подключение клик сигнала к слоту TranslateClicked
-        self.ui.ASK_Button.clicked.connect(self.ASKClicked)       # Подключение клик сигнала к слоту ASKClicked
-        self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)
+        self.ui.LineTranslate_1.setMaxLength(34)                      # Ограничение символов в поле ввода 1
+        self.ui.LineTranslate_2.setMaxLength(34)                      # Ограничение символов в поле ввода 2
+        self.ui.Translate.clicked.connect(self.TranslateClicked)      # Подключение клик сигнала к def TranslateClicked
+        self.ui.ASK_Button.clicked.connect(self.ASKClicked)           # Подключение клик сигнала к def ASKClicked
+        self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)  # Подключение "клик" сигнала к def Check_Answer
 
     def Check_Answer(self, state):
-
         if state == QtCore.Qt.Checked:
             print("Ух ты! Вы любите программирование.")
         else:
