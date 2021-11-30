@@ -1,12 +1,12 @@
 from PyQt5 import QtWidgets, QtCore
-from TranslateUI import Ui_MainWindow  # импорт UI файла
+from TranslateUI import Ui_TranslateAPP  # импорт UI файла
 import sys
 
 
 class mywindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(mywindow, self).__init__()
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_TranslateAPP()
         self.ui.setupUi(self)
 
         self.ui.LineTranslate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
@@ -24,12 +24,12 @@ class mywindow(QtWidgets.QMainWindow):
 
     def Check_Answer(self, state):
         if state == QtCore.Qt.Checked:
-            print("Enable")
+            print("BoxEnable")
         else:
-            print("Disable")
+            print("BoxDisable")
 
     def spinboxChanged(self, value):
-        print('new value of spinbox is:', value)
+        print('New value of spinbox is:', value)
 
 
 app = QtWidgets.QApplication([])
