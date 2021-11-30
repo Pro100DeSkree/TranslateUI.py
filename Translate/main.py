@@ -9,14 +9,15 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.ui.LineTranslate_1.setMaxLength(34)                      # Ограничение символов в поле ввода 1
-        self.ui.LineTranslate_2.setMaxLength(34)                      # Ограничение символов в поле ввода 2
-        self.ui.Translate.clicked.connect(self.TranslateClicked)      # Подключение клик сигнала к def TranslateClicked
-        self.ui.ASK_Button.clicked.connect(self.ASKClicked)           # Подключение клик сигнала к def ASKClicked
-        self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)  # Подключение "клик" сигнала к def Check_Answer
+        self.ui.LineTranslate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
+        self.ui.LineTranslate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
+        self.ui.Translate.clicked.connect(self.TranslateClicked)       # Подключение клик сигнала к def TranslateClicked
+        self.ui.ASK_Button.clicked.connect(self.ASKClicked)            # Подключение клик сигнала к def ASKClicked
+        self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)   # Подключение "клик" сигнала к def Check_Answer
+        self.ui.TimeSpinBox.valueChanged.connect(self.spinboxChanged)  # Подключение спинбокса к def spinboxChanged
 
-    def TranslateClicked(self):                                       # Функция реагирования на клик
-        print(self.ui.LineTranslate_1.text())                         # Вывод содержимого поля 1
+    def TranslateClicked(self):                                        # Функция реагирования на клик
+        print(self.ui.LineTranslate_1.text())                          # Вывод содержимого поля 1
 
     def ASKClicked(self):
         print("Clicked ASK")
@@ -26,6 +27,9 @@ class mywindow(QtWidgets.QMainWindow):
             print("Ух ты! Вы любите программирование.")
         else:
             print("О нет! – Вы не любите программировать.")
+
+    def spinboxChanged(self, value):
+        print('new value of spinbox is:', value)
 
 
 app = QtWidgets.QApplication([])
