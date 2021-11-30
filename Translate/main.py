@@ -24,9 +24,9 @@ class mywindow(QtWidgets.QMainWindow):
 
     def Check_Answer(self, state):
         if state == QtCore.Qt.Checked:
-            print("Ух ты! Вы любите программирование.")
+            print("Enable")
         else:
-            print("О нет! – Вы не любите программировать.")
+            print("Disable")
 
     def spinboxChanged(self, value):
         print('new value of spinbox is:', value)
