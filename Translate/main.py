@@ -16,17 +16,17 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.ASK_Button.clicked.connect(self.ASKClicked)           # Подключение клик сигнала к def ASKClicked
         self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)  # Подключение "клик" сигнала к def Check_Answer
 
+    def TranslateClicked(self):                                       # Функция реагирования на клик
+        print(self.ui.LineTranslate_1.text())                         # Вывод содержимого поля 1
+
+    def ASKClicked(self):
+        print("Clicked ASK")
+
     def Check_Answer(self, state):
         if state == QtCore.Qt.Checked:
             print("Ух ты! Вы любите программирование.")
         else:
             print("О нет! – Вы не любите программировать.")
-
-    def ASKClicked(self):
-        print("Clicked ASK")
-
-    def TranslateClicked(self):                                   # Функция реагирования на клик
-        print(self.ui.LineTranslate_1.text())                     # Вывод содержимого поля 1
 
 
 app = QtWidgets.QApplication([])
