@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QCheckBox
 from TranslateUI import Ui_MainWindow  # импорт UI файла
 import sys
 
