@@ -10,6 +10,7 @@ class mywindow(QtWidgets.QMainWindow):
     # Settings
     def __init__(self):
         super(mywindow, self).__init__()
+
         self.translator = Translator()
         self.ui = Ui_TranslateAPP()
         self.ui.setupUi(self)
@@ -60,9 +61,10 @@ class mywindow(QtWidgets.QMainWindow):
     def spinboxChanged(self, value):
         print('New value of spinbox is:', value)
 
-    # Initialization
-app = QtWidgets.QApplication([])
-application = mywindow()
-application.show()
 
-sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
+    application = mywindow()
+    application.show()
+
+    sys.exit(app.exec())
