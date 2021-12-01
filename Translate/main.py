@@ -27,8 +27,11 @@ class mywindow(QtWidgets.QMainWindow):
     def translate(self, lang1, lang2):                                      # Функция реагирования на клик
         word = self.ui.LineTranslate_1.text()                               # Вывод содержимого поля 1
         print(lang1, lang2)
-        translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
-        self.ui.LineTranslate_2.setText(translate.text)                     # Вывод перевода
+        try:
+            translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
+            self.ui.LineTranslate_2.setText(translate.text)                     # Вывод перевода
+        except TypeError:
+            self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")
 
     def CheckLangBoxes(self):                                   # Функция чтения с ComboBox и передачей в translate()
         lang1 = self.ui.Languages_1.currentText()               # Получаем значение с ComboBox
