@@ -95,6 +95,9 @@
          <property name="text">
           <string/>
          </property>
+         <property name="placeholderText">
+          <string>Translatable</string>
+         </property>
         </widget>
        </item>
        <item row="0" column="0">
@@ -138,6 +141,15 @@
         <widget class="QLineEdit" name="LineTranslate_2">
          <property name="text">
           <string/>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="placeholderText">
+          <string>Translated</string>
+         </property>
+         <property name="cursorMoveStyle">
+          <enum>Qt::LogicalMoveStyle</enum>
          </property>
         </widget>
        </item>
@@ -183,7 +195,7 @@
      <rect>
       <x>123</x>
       <y>120</y>
-      <width>262</width>
+      <width>263</width>
       <height>41</height>
      </rect>
     </property>
