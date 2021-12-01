@@ -54,3 +54,4 @@ application = mywindow()
 application.show()
 
 sys.exit(app.exec())
+# gg
