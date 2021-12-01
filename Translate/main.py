@@ -28,7 +28,7 @@ class mywindow(QtWidgets.QMainWindow):
         word = self.ui.LineTranslate_1.text()                               # Вывод содержимого поля 1
         print(lang1, lang2)
         try:
-            translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
+            translate = self.translator.translate(word, dest=lang1, src=lang2)  # Перевод
             self.ui.LineTranslate_2.setText(translate.text)                     # Вывод перевода
         except TypeError:
             self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")
