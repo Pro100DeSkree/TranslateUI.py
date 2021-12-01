@@ -29,7 +29,7 @@ class mywindow(QtWidgets.QMainWindow):
         translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
         self.ui.LineTranslate_2.setText(translate.text)                     # Вывод перевода
 
-    def CheckLangBoxes(self):
+    def CheckLangBoxes(self):                                   # Функция чтения с ComboBox и передачей в translate()
         lang1 = self.ui.Languages_1.currentText()               # Получаем значение с ComboBox
         lang2 = self.ui.Languages_2.currentText()               # Получаем значение с ComboBox
 
@@ -60,6 +60,10 @@ class mywindow(QtWidgets.QMainWindow):
 
     def spinboxChanged(self, value):
         print('New value of spinbox is:', value)
+
+    def keyPressEvent(self, event):                             # Функция чтения клавишь Return & Enter
+        if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:
+            self.CheckLangBoxes()
 
 
 if __name__ == "__main__":
