@@ -28,15 +28,13 @@ class mywindow(QtWidgets.QMainWindow):
         print(lang1, lang2)
 
         word = self.ui.LineTranslate_1.text()                          # Вывод содержимого поля 1
-        #translate = self.translator.translate(word, src=lang1, dest=lang2)
-        #self.ui.LineTranslate_2.setText(translate.text)
+        translate = self.translator.translate(word, src=lang1, dest=lang2)
+        self.ui.LineTranslate_2.setText(translate.text)
 
     def CheckLangBoxes(self):
         lang1 = self.ui.Languages_1.currentText()
         lang2 = self.ui.Languages_2.currentText()
 
-        # lang1_1 = ""
-        # lang1_2 = ""
         if lang1 == "English":
             lang1_1 = 'en'
         elif lang1 == "Russian":
