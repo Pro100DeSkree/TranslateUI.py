@@ -15,25 +15,25 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.LineTranslate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.LineTranslate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
-        self.ui.Translate.clicked.connect(self.CheckLangBoxes)       # Подключение клик сигнала к def TranslateClicked
-        self.ui.ASK_Button.clicked.connect(self.ASKClicked)            # Подключение клик сигнала к def ASKClicked
-        self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)   # Подключение "клик" сигнала к def Check_Answer
-        self.ui.TimeSpinBox.valueChanged.connect(self.spinboxChanged)  # Подключение спинбокса к def spinboxChanged
-        self.ui.Languages_1.addItems(Boxlang1)                            # Список языков в QComboBox1
-        self.ui.Languages_2.addItems(Boxlang2)                            # Список языков в QComboBox2
+        self.ui.Translate.clicked.connect(self.CheckLangBoxes)         # При нажатии кнопки "Перевод" вызываем функцию
+        self.ui.ASK_Button.clicked.connect(self.ASKClicked)            # При нажатии кнопки "Спросить" вызываем функцию
+        self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)   # Подключение ЧекБокса "Спаршивать переодически"
+        self.ui.TimeSpinBox.valueChanged.connect(self.spinboxChanged)  # Подключение SpinBox "Интервал между вопросами"
+        self.ui.Languages_1.addItems(Boxlang1)                         # Список языков в QComboBox1
+        self.ui.Languages_2.addItems(Boxlang2)                         # Список языков в QComboBox2
 
     # Function
     def translate(self, lang1, lang2):                          # Функция реагирования на клик
 
         print(lang1, lang2)
 
-        word = self.ui.LineTranslate_1.text()                          # Вывод содержимого поля 1
-        translate = self.translator.translate(word, src=lang1, dest=lang2)
-        self.ui.LineTranslate_2.setText(translate.text)
+        word = self.ui.LineTranslate_1.text()                   # Вывод содержимого поля 1
+        translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
+        self.ui.LineTranslate_2.setText(translate.text)         # Вывод перевода
 
     def CheckLangBoxes(self):
-        lang1 = self.ui.Languages_1.currentText()
-        lang2 = self.ui.Languages_2.currentText()
+        lang1 = self.ui.Languages_1.currentText()               # Получаем значение с ComboBox
+        lang2 = self.ui.Languages_2.currentText()               # Получаем значение с ComboBox
 
         if lang1 == "English":
             lang1_1 = 'en'
@@ -49,7 +49,7 @@ class mywindow(QtWidgets.QMainWindow):
         else:
             lang1_2 = 'uk'
 
-        self.translate(lang1_1, lang1_2)
+        self.translate(lang1_1, lang1_2)                        # Вызываем функцию с параметрами языков
 
     def ASKClicked(self):
         print("Clicked ASK")
@@ -69,4 +69,3 @@ application = mywindow()
 application.show()
 
 sys.exit(app.exec())
-# gg

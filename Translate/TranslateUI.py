@@ -125,4 +125,3 @@ class Ui_TranslateAPP(object):
         self.LineTranslate_2.setPlaceholderText(_translate("TranslateAPP", "Translated"))
         self.LabelTranslate_2.setText(_translate("TranslateAPP", "Перевод"))
         self.ASK_CheckBox.setText(_translate("TranslateAPP", "Спрашивать переодически"))
-# gg
