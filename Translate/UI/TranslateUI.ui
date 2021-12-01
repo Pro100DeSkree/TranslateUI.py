@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>TranslateAPP</class>
+ <widget class="QMainWindow" name="TranslateAPP">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>545</width>
-    <height>192</height>
+    <width>546</width>
+    <height>189</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,25 +23,44 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Translate</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="gridLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>4</x>
       <y>80</y>
-      <width>205</width>
+      <width>540</width>
       <height>41</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="ButtonGroup">
      <item row="0" column="1">
-      <widget class="QPushButton" name="Translate">
-       <property name="text">
-        <string>Перевести</string>
-       </property>
-      </widget>
+      <layout class="QGridLayout" name="LanguagesBox">
+       <item row="1" column="2">
+        <widget class="QComboBox" name="Languages_1"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QComboBox" name="Languages_2"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="Arrow">
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>➡➡➡</string>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="ASK_Button">
@@ -50,14 +69,21 @@
        </property>
       </widget>
      </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="Translate">
+       <property name="text">
+        <string>Перевести</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>4</x>
       <y>0</y>
-      <width>541</width>
+      <width>540</width>
       <height>71</height>
      </rect>
     </property>
@@ -155,9 +181,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>282</x>
+      <x>123</x>
       <y>120</y>
-      <width>263</width>
+      <width>262</width>
       <height>41</height>
      </rect>
     </property>

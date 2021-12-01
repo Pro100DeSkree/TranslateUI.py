@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QLabel
 from TranslateUI import Ui_TranslateAPP  # импорт UI файла
 import googletrans                       # Импортируем гугл переводчик
 import sys
