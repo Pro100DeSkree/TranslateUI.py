@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
+from PyQt5.QtWidgets import QLabel
 from TranslateUI import Ui_TranslateAPP  # импорт UI файла
 import googletrans                       # Импортируем гугл переводчик
 import sys
@@ -16,6 +17,12 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.ASK_Button.clicked.connect(self.ASKClicked)            # Подключение клик сигнала к def ASKClicked
         self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)   # Подключение "клик" сигнала к def Check_Answer
         self.ui.TimeSpinBox.valueChanged.connect(self.spinboxChanged)  # Подключение спинбокса к def spinboxChanged
+        self.ui.Languages_1.addItems(["Ubuntu", "Mandriva",
+                                      "Fedora", "Arch", "Gentoo"])
+        self.ui.Languages_2.addItems(["Ubuntu", "Mandriva",
+                                      "Fedora", "Arch", "Gentoo"])
+        self.ui.Languages_1.activated[str].connect(self.Lang_ComboBox_1)
+        self.ui.Languages_2.activated[str].connect(self.Lang_ComboBox_2)
 
     def TranslateClicked(self):                                        # Функция реагирования на клик
         print(self.ui.LineTranslate_1.text())                          # Вывод содержимого поля 1
@@ -31,6 +38,12 @@ class mywindow(QtWidgets.QMainWindow):
 
     def spinboxChanged(self, value):
         print('New value of spinbox is:', value)
+
+    def Lang_ComboBox_1(self, text):
+        print(text)
+
+    def Lang_ComboBox_2(self, text):
+        print(text)
 
 
 app = QtWidgets.QApplication([])
