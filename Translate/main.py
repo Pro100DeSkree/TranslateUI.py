@@ -23,13 +23,10 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Languages_2.addItems(Boxlang2)                         # Список языков в QComboBox2
 
     # Function
-    def translate(self, lang1, lang2):                          # Функция реагирования на клик
-
-        print(lang1, lang2)
-
-        word = self.ui.LineTranslate_1.text()                   # Вывод содержимого поля 1
+    def translate(self, lang1, lang2):                                      # Функция реагирования на клик
+        word = self.ui.LineTranslate_1.text()                               # Вывод содержимого поля 1
         translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
-        self.ui.LineTranslate_2.setText(translate.text)         # Вывод перевода
+        self.ui.LineTranslate_2.setText(translate.text)                     # Вывод перевода
 
     def CheckLangBoxes(self):
         lang1 = self.ui.Languages_1.currentText()               # Получаем значение с ComboBox
