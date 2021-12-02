@@ -1,7 +1,7 @@
-from PyQt5 import QtWidgets, QtCore
-from TranslateUI import Ui_TranslateAPP  # импорт UI файла
-from googletrans import Translator                       # Импортируем гугл переводчик
-import sys
+from PyQt5 import QtWidgets, QtCore          # Импортируем Qt5
+from TranslateUI import Ui_TranslateAPP      # Импорт UI файла
+from googletrans import Translator           # Импортируем гугл переводчик
+import sys                                   # Импортируем модуль system
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -19,8 +19,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.LangSwitcher.clicked.connect(self.LangSwitch)
         self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)   # Подключение ЧекБокса "Спаршивать переодически"
         self.ui.TimeSpinBox.valueChanged.connect(self.spinboxChanged)  # Подключение SpinBox "Интервал между вопросами"
-        self.ui.Languages_1.addItems(["English", "Russian", "Ukraine"])                  # Список языков в QComboBox1
-        self.ui.Languages_2.addItems(["Russian", "English", "Ukraine"])                  # Список языков в QComboBox2
+        self.ui.Languages_1.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox1
+        self.ui.Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
+        self.ui.Languages_2.setCurrentIndex(1)
 
     # Function
     def translate(self, lang1, lang2):                                      # Функция реагирования на клик
@@ -34,8 +35,6 @@ class mywindow(QtWidgets.QMainWindow):
     def CheckLangBoxes(self):                                   # Функция чтения с ComboBox и передачей в translate()
         lang1 = self.ui.Languages_1.currentText()               # Получаем значение с ComboBox
         lang2 = self.ui.Languages_2.currentText()               # Получаем значение с ComboBox
-
-
 
         if lang1 == "English":
             lang1_1 = 'en'
@@ -66,11 +65,15 @@ class mywindow(QtWidgets.QMainWindow):
         print('New value of spinbox is:', value)
 
     def keyPressEvent(self, event):                             # Функция чтения клавишь Return & Enter
-        if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:
-            self.CheckLangBoxes()
+        if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь
+            self.CheckLangBoxes()                               # Вызываем функцию      #       Return & Enter
 
-    def LangSwitch(self):
-        print("Тут должна быть сменя языков местами")
+    def LangSwitch(self, index1):                               # Функция смены языков местами
+        idxLang1 = self.ui.Languages_1.findText(self.ui.Languages_1.currentText())  # Получаем индекс активного языка
+        idxLang2 = self.ui.Languages_2.findText(self.ui.Languages_2.currentText())  # Получаем индекс активного языка
+
+        self.ui.Languages_1.setCurrentIndex(idxLang2)                               # Меняем языки местами по индексу
+        self.ui.Languages_2.setCurrentIndex(idxLang1)                               # Меняем языки местами по индексу
 
 
 if __name__ == "__main__":
