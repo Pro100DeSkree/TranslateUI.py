@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtCore          # Импортируем Qt5
-from PyQt5.Qt import *
 from TranslateUI import Ui_TranslateAPP      # Импорт UI файла
 from googletrans import Translator           # Импортируем гугл переводчик
 import sys                                   # Импортируем модуль system
