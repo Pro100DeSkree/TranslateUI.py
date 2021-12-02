@@ -92,3 +92,5 @@ if __name__ == "__main__":
     application.show()
 
     sys.exit(app.exec())
+# Made by DeSkreeツ
+# :)
