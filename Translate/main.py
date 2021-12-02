@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtCore          # Импортируем Qt5
+from PyQt5.Qt import *
 from TranslateUI import Ui_TranslateAPP      # Импорт UI файла
 from googletrans import Translator           # Импортируем гугл переводчик
 import sys                                   # Импортируем модуль system
@@ -22,6 +23,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Languages_1.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox1
         self.ui.Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
         self.ui.Languages_2.setCurrentIndex(1)
+        self.GrayLang()
 
     # Function
     def translate(self, lang1, lang2):                                      # Функция реагирования на клик
@@ -50,6 +52,7 @@ class mywindow(QtWidgets.QMainWindow):
         else:
             lang1_2 = 'uk'
 
+        self.GrayLang(lang1)
         self.translate(lang1_1, lang1_2)                        # Вызываем функцию с параметрами языков
 
     def ASKClicked(self):
@@ -68,12 +71,20 @@ class mywindow(QtWidgets.QMainWindow):
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь
             self.CheckLangBoxes()                               # Вызываем функцию      #       Return & Enter
 
-    def LangSwitch(self, index1):                               # Функция смены языков местами
+    def LangSwitch(self):                               # Функция смены языков местами
         idxLang1 = self.ui.Languages_1.findText(self.ui.Languages_1.currentText())  # Получаем индекс активного языка
         idxLang2 = self.ui.Languages_2.findText(self.ui.Languages_2.currentText())  # Получаем индекс активного языка
 
         self.ui.Languages_1.setCurrentIndex(idxLang2)                               # Меняем языки местами по индексу
         self.ui.Languages_2.setCurrentIndex(idxLang1)                               # Меняем языки местами по индексу
+
+    def GrayLang(self, lang1="English"):                # Функция делает неактивными язык в ComboBox (Запускаеться 1раз)
+        model = self.ui.Languages_2.model()  # QStandardItemModel, метод model.item возвращает объекты QStandardItem
+        model.item(0).setEnabled(True)
+        model.item(1).setEnabled(True)
+        model.item(2).setEnabled(True)
+        idxLang1 = self.ui.Languages_1.findText(lang1)  # Получаем индекс активного языка
+        model.item(idxLang1).setEnabled(False)          # Указываем какие элементы сделать невыбираемыми
 
 
 if __name__ == "__main__":
