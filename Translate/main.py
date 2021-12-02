@@ -25,9 +25,8 @@ class mywindow(QtWidgets.QMainWindow):
     # Function
     def translate(self, lang1, lang2):                                      # Функция реагирования на клик
         word = self.ui.LineTranslate_1.text()                               # Вывод содержимого поля 1
-        print(lang2, lang1)
         try:
-            translate = self.translator.translate(word, dest=lang1, src=lang2)  # Перевод
+            translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
             self.ui.LineTranslate_2.setText(translate.text)                     # Вывод перевода
         except TypeError:
             self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")

@@ -39,10 +39,10 @@
      <item row="0" column="1">
       <layout class="QGridLayout" name="LanguagesBox">
        <item row="1" column="2">
-        <widget class="QComboBox" name="Languages_1"/>
+        <widget class="QComboBox" name="Languages_2"/>
        </item>
        <item row="1" column="0">
-        <widget class="QComboBox" name="Languages_2"/>
+        <widget class="QComboBox" name="Languages_1"/>
        </item>
        <item row="1" column="1">
         <widget class="QPushButton" name="LangSwitcher">
