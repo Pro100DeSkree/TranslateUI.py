@@ -23,6 +23,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
         self.ui.Languages_2.setCurrentIndex(1)
         self.GrayLang()
+        # self.ui.ByDeSkree.setText("By DeSkree")
 
     # Function
     def translate(self, lang1, lang2):                                      # Функция реагирования на клик
@@ -65,10 +66,15 @@ class mywindow(QtWidgets.QMainWindow):
 
     def spinboxChanged(self, value):
         print('New value of spinbox is:', value)
+        if value == 21:
+            print("Нужно дополнительное условие")
 
     def keyPressEvent(self, event):                             # Функция чтения клавишь Return & Enter
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь
             self.CheckLangBoxes()                               # Вызываем функцию      #       Return & Enter
+
+        if event.key() == QtCore.Qt.Key_:
+            self.ui.ByDeSkree.setText("By DeSkree")
 
     def LangSwitch(self):                               # Функция смены языков местами
         idxLang1 = self.ui.Languages_1.findText(self.ui.Languages_1.currentText())  # Получаем индекс активного языка
