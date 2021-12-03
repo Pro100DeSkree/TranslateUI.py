@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore          # Импортируем Qt5
 from TranslateUI import Ui_TranslateAPP      # Импорт UI файла
 from googletrans import Translator           # Импортируем гугл переводчик
 import sys                                   # Импортируем модуль system
+import http.client as httplib
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -23,16 +24,22 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
         self.ui.Languages_2.setCurrentIndex(1)
         self.GrayLang()
+        self.CheckInternet()
         # self.ui.ByDeSkree.setText("By DeSkree")
 
     # Function
     def translate(self, lang1, lang2):                                      # Функция реагирования на клик
-        word = self.ui.LineTranslate_1.text()                               # Вывод содержимого поля 1
-        try:
-            translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
-            self.ui.LineTranslate_2.setText(translate.text)                     # Вывод перевода
-        except TypeError:
-            self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")
+        ConnOrDisconn = self.CheckInternet()
+        if ConnOrDisconn == "Connected":
+            print(ConnOrDisconn)
+            word = self.ui.LineTranslate_1.text()                               # Вывод содержимого поля 1
+            try:
+                translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
+                self.ui.LineTranslate_2.setText(translate.text)                     # Вывод перевода
+            except TypeError:
+                self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")
+        else:
+            self.CheckInternet()
 
     def CheckLangBoxes(self):                                   # Функция чтения с ComboBox и передачей в translate()
         lang1 = self.ui.Languages_1.currentText()               # Получаем значение с ComboBox
@@ -73,9 +80,6 @@ class mywindow(QtWidgets.QMainWindow):
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь
             self.CheckLangBoxes()                               # Вызываем функцию      #       Return & Enter
 
-        if event.key() == QtCore.Qt.Key_:
-            self.ui.ByDeSkree.setText("By DeSkree")
-
     def LangSwitch(self):                               # Функция смены языков местами
         idxLang1 = self.ui.Languages_1.findText(self.ui.Languages_1.currentText())  # Получаем индекс активного языка
         idxLang2 = self.ui.Languages_2.findText(self.ui.Languages_2.currentText())  # Получаем индекс активного языка
@@ -90,6 +94,17 @@ class mywindow(QtWidgets.QMainWindow):
         model.item(2).setEnabled(True)
         idxLang1 = self.ui.Languages_1.findText(lang1)  # Получаем индекс активного языка
         model.item(idxLang1).setEnabled(False)          # Указываем какие элементы сделать невыбираемыми
+
+    def CheckInternet(self):
+        conn = httplib.HTTPConnection("www.google.com")
+        try:
+            conn.request("HEAD", "/")
+            self.ui.LineTranslate_1.setEnabled(True)
+            return "Connected"
+        except:
+            while False:
+                self.ui.LineTranslate_1.setEnabled(False)
+            print("Disconnected")
 
 
 if __name__ == "__main__":
