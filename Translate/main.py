@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from TranslateUI import Ui_TranslateAPP      # Импорт Главного интерфейса
 from ASKWin import Ui_ASKDialogWin           # Импорт Диалогового интерфейса(ASK)
 from googletrans import Translator           # Импортируем гугл переводчик
+from fuzzywuzzy import process as fuzz_p
 import sys                                   # Импортируем модуль system
 import http.client as httplib
 
@@ -53,16 +54,7 @@ class mywindow(QtWidgets.QMainWindow):
                 translateText = translate.text                                      # Получаем слово с перевода
                 self.ui.LineTranslate_2.setText(translateText)                      # Вывод перевода
 
-                CheckWord = {}
-
-                with open("BD_Word.txt", "r") as BD_Word:       # Открываем файл на чтение
-                    for line in BD_Word:
-                        key, *value = line.split()
-                        CheckWord[key] = value
-                    print(CheckWord.items())
-                with open("BD_Word.txt", "a") as BD_Word:
-                    Words = {word: translateText}               # Создаём список с переведёнными словами
-                    print(Words, file=BD_Word)                  # Запись переведённых слов в файл
+                self.Write(word, translateText)
 
             except TypeError:
                 self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")
@@ -137,6 +129,20 @@ class mywindow(QtWidgets.QMainWindow):
                 self.ui.LineTranslate_1.setEnabled(False)
                 # self.CheckInternet()
             print("Disconnected")
+
+    def Write(self, word, translateText):
+        list = []
+        WriteWord = word + " --> " + translateText + "\n"
+
+        with open("BD_Word.txt", "r") as BD_Word:  # Открываем файл на чтение
+            for i in BD_Word:
+                list.append(i)
+            print(list)
+        with open("BD_Word.txt", 'a') as BD_Word:
+            FuzzCoef = fuzz_p.extractOne(WriteWord, list)
+            print(FuzzCoef[1])
+            if FuzzCoef[1] < 100:
+                BD_Word.write(WriteWord)
 
 
 if __name__ == "__main__":
