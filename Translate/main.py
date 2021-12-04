@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtCore          # Импортируем Qt5
-from TranslateUI import Ui_TranslateAPP      # Импорт UI файла
+from TranslateUI import Ui_TranslateAPP      # Импорт Главного интерфейса
+
 from googletrans import Translator           # Импортируем гугл переводчик
 import sys                                   # Импортируем модуль system
 import http.client as httplib
@@ -104,6 +105,7 @@ class mywindow(QtWidgets.QMainWindow):
         except:
             while False:
                 self.ui.LineTranslate_1.setEnabled(False)
+                # self.CheckInternet()
             print("Disconnected")
 
 
