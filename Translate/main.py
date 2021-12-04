@@ -16,7 +16,7 @@ class dialog_win(QDialog):
         self.ASKui.setupUi(self)
         self.ASKui.ASKWord.setText("Тут дол. быть слово")
 
-        with open('BD_Word.txt', mode="rt") as BD_Word:
+        with open('BD_Word.txt', mode="r") as BD_Word:
             for line in BD_Word.readlines():
                 print(line)
 
@@ -54,7 +54,9 @@ class mywindow(QtWidgets.QMainWindow):
                 translateText = translate.text                                      # Получаем слово с перевода
                 self.ui.LineTranslate_2.setText(translateText)                      # Вывод перевода
 
-                self.Write(word, translateText)
+                if lang1 != 'uk' and lang2 != 'uk':
+                    if word != translateText:
+                        self.Write(word, translateText)
 
             except TypeError:
                 self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")
