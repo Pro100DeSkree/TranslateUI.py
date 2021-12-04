@@ -15,6 +15,10 @@ class dialog_win(QDialog):
         self.ASKui.setupUi(self)
         self.ASKui.ASKWord.setText("Тут дол. быть слово")
 
+        with open('BD_Word.txt', mode="rt") as BD_Word:
+            for line in BD_Word.readlines():
+                print(line)
+
 
 class mywindow(QtWidgets.QMainWindow):
     # Settings
@@ -41,12 +45,25 @@ class mywindow(QtWidgets.QMainWindow):
     # Function
     def translate(self, lang1, lang2):                                      # Функция реагирования на клик
         ConnOrDisconn = self.CheckInternet()
+
         if ConnOrDisconn == "Connected":
-            print(ConnOrDisconn)
-            word = self.ui.LineTranslate_1.text()                               # Вывод содержимого поля 1
+            word = self.ui.LineTranslate_1.text()                                   # Вывод содержимого поля 1
             try:
                 translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
-                self.ui.LineTranslate_2.setText(translate.text)                     # Вывод перевода
+                translateText = translate.text                                      # Получаем слово с перевода
+                self.ui.LineTranslate_2.setText(translateText)                      # Вывод перевода
+
+                CheckWord = {}
+
+                with open("BD_Word.txt", "r") as BD_Word:       # Открываем файл на чтение
+                    for line in BD_Word:
+                        key, *value = line.split()
+                        CheckWord[key] = value
+                    print(CheckWord.items())
+                with open("BD_Word.txt", "a") as BD_Word:
+                    Words = {word: translateText}               # Создаём список с переведёнными словами
+                    print(Words, file=BD_Word)                  # Запись переведённых слов в файл
+
             except TypeError:
                 self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")
         else:
