@@ -9,10 +9,9 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from klineedit import KLineEdit
 
 
-class Ui_Dialog(object):
+class Ui_ASKDialogWin(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(376, 104)
@@ -22,15 +21,13 @@ class Ui_Dialog(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.TranslateLine_1 = KLineEdit(self.horizontalLayoutWidget)
-        self.TranslateLine_1.setAccessibleName("")
-        self.TranslateLine_1.setReadOnly(True)
-        self.TranslateLine_1.setObjectName("TranslateLine_1")
-        self.horizontalLayout.addWidget(self.TranslateLine_1)
-        self.TranslateLine_2 = KLineEdit(self.horizontalLayoutWidget)
-        self.TranslateLine_2.setReadOnly(False)
-        self.TranslateLine_2.setObjectName("TranslateLine_2")
-        self.horizontalLayout.addWidget(self.TranslateLine_2)
+        self.ASKWord = QtWidgets.QLineEdit(self.horizontalLayoutWidget)
+        self.ASKWord.setReadOnly(True)
+        self.ASKWord.setObjectName("ASKWord")
+        self.horizontalLayout.addWidget(self.ASKWord)
+        self.ASKWordTrans = QtWidgets.QLineEdit(self.horizontalLayoutWidget)
+        self.ASKWordTrans.setObjectName("ASKWordTrans")
+        self.horizontalLayout.addWidget(self.ASKWordTrans)
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(Dialog)
         self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(166, 57, 201, 41))
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
@@ -50,6 +47,6 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.TranslateLine_2.setPlaceholderText(_translate("Dialog", "Translate"))
+        self.ASKWordTrans.setPlaceholderText(_translate("Dialog", "Translate"))
         self.pushButton_2.setText(_translate("Dialog", "Проверить"))
         self.pushButton.setText(_translate("Dialog", "Хз"))

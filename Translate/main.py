@@ -1,9 +1,19 @@
 from PyQt5 import QtWidgets, QtCore          # Импортируем Qt5
+from PyQt5.QtWidgets import *
 from TranslateUI import Ui_TranslateAPP      # Импорт Главного интерфейса
-
+from ASKWin import Ui_ASKDialogWin           # Импорт Диалогового интерфейса(ASK)
 from googletrans import Translator           # Импортируем гугл переводчик
 import sys                                   # Импортируем модуль system
 import http.client as httplib
+
+
+class dialog_win(QDialog):
+    def __init__(self):
+        super(dialog_win, self).__init__()
+
+        self.ASKui = Ui_ASKDialogWin()
+        self.ASKui.setupUi(self)
+        self.ASKui.ASKWord.setText("Тут дол. быть слово")
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -64,6 +74,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.translate(lang1_1, lang1_2)                        # Вызываем функцию с параметрами языков
 
     def ASKClicked(self):
+        self.cust = dialog_win()
+        if self.cust.exec_():
+            print('get')
         print("Clicked ASK")
 
     def Check_Answer(self, state):
