@@ -3,22 +3,10 @@ from PyQt5.QtWidgets import *
 from TranslateUI import Ui_TranslateAPP      # Импорт Главного интерфейса
 from ASKWin import Ui_ASKDialogWin           # Импорт Диалогового интерфейса(ASK)
 from googletrans import Translator           # Импортируем гугл переводчик
-from fuzzywuzzy import process as fuzz_p
+from fuzzywuzzy import process as fuzz_p     # Импортируем модуль нечёткого сравнения
+import random as rd                          # Импортируем модуль рандом
 import sys                                   # Импортируем модуль system
 import http.client as httplib
-
-
-class dialog_win(QDialog):
-    def __init__(self):
-        super(dialog_win, self).__init__()
-
-        self.ASKui = Ui_ASKDialogWin()
-        self.ASKui.setupUi(self)
-        self.ASKui.ASKWord.setText("Тут дол. быть слово")
-
-        with open('BD_Word.txt', mode="r") as BD_Word:
-            for line in BD_Word.readlines():
-                print(line)
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -139,13 +127,29 @@ class mywindow(QtWidgets.QMainWindow):
         with open("BD_Word.txt", "r") as BD_Word:  # Открываем файл на чтение
             for i in BD_Word:
                 list.append(i)
-            print(list)
+            # print(list)
         with open("BD_Word.txt", 'a') as BD_Word:
             FuzzCoef = fuzz_p.extractOne(WriteWord, list)
-            print(FuzzCoef[1])
             if FuzzCoef[1] < 100:
                 BD_Word.write(WriteWord)
 
+
+class dialog_win(QDialog):
+    def __init__(self):
+        super(dialog_win, self).__init__()
+
+        self.ASKui = Ui_ASKDialogWin()
+        self.ASKui.setupUi(self)
+        list = []
+
+        with open('BD_Word.txt', mode="r") as BD_Word:
+            for line in BD_Word.readlines():
+                list.append(line)
+            print(list)
+        RandWord = list[rd.randint(0, len(list))]
+        Word = RandWord.partition(' --> ')[-3]
+
+        self.ASKui.ASKWord.setText(Word)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
