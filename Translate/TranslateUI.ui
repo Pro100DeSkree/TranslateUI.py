@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>546</width>
-    <height>189</height>
+    <width>547</width>
+    <height>191</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -30,7 +30,7 @@
     <property name="geometry">
      <rect>
       <x>3</x>
-      <y>76</y>
+      <y>79</y>
       <width>540</width>
       <height>41</height>
      </rect>
@@ -107,7 +107,7 @@
     <property name="geometry">
      <rect>
       <x>4</x>
-      <y>0</y>
+      <y>3</y>
       <width>540</width>
       <height>71</height>
      </rect>
@@ -115,16 +115,6 @@
     <layout class="QHBoxLayout" name="AllLineTranslate">
      <item>
       <layout class="QGridLayout" name="GroupTranslate_1">
-       <item row="1" column="0" colspan="3">
-        <widget class="QLineEdit" name="LineTranslate_1">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="placeholderText">
-          <string>Translatable</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <spacer name="horizontalSpacer_1_1">
          <property name="orientation">
@@ -138,13 +128,6 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="LabelTranslate_1">
-         <property name="text">
-          <string>Перевести</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="2">
         <spacer name="horizontalSpacer_1_2">
          <property name="orientation">
@@ -157,6 +140,23 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="1" column="0" colspan="3">
+        <widget class="QLineEdit" name="LineTranslate_1">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="placeholderText">
+          <string>Translatable</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="LabelTranslate_1">
+         <property name="text">
+          <string>Перевести</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -219,7 +219,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>120</y>
+      <y>123</y>
       <width>263</width>
       <height>41</height>
      </rect>
@@ -269,7 +269,7 @@
     <property name="geometry">
      <rect>
       <x>407</x>
-      <y>117</y>
+      <y>120</y>
       <width>141</width>
       <height>41</height>
      </rect>
@@ -286,6 +286,37 @@
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ConnReload">
+    <property name="geometry">
+     <rect>
+      <x>2</x>
+      <y>125</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+      <kerning>false</kerning>
+     </font>
+    </property>
+    <property name="text">
+     <string>🔃</string>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+    <property name="autoRepeat">
+     <bool>false</bool>
+    </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>

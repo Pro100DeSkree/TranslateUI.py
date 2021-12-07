@@ -1,12 +1,15 @@
-from PyQt5 import QtWidgets, QtCore          # Импортируем Qt5
+from PyQt5 import QtWidgets, QtCore, Qt          # Импортируем Qt5
 from PyQt5.QtWidgets import *
 from TranslateUI import Ui_TranslateAPP      # Импорт Главного интерфейса
 from ASKWin import Ui_ASKDialogWin           # Импорт Диалогового интерфейса(ASK)
 from googletrans import Translator           # Импортируем гугл переводчик
 from fuzzywuzzy import process as fuzz_p     # Импортируем модуль нечёткого сравнения
+from fuzzywuzzy import fuzz
 import random as rd                          # Импортируем модуль рандом
 import sys                                   # Импортируем модуль system
 import http.client as httplib
+import time
+from threading import *
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -19,6 +22,7 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.LineTranslate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.LineTranslate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
+        # self.ui.ConnReload.clicked.connect(self.CheckInternet())
         self.ui.Translate.clicked.connect(self.CheckLangBoxes)         # При нажатии кнопки "Перевод" вызываем функцию
         self.ui.ASK_Button.clicked.connect(self.ASKClicked)            # При нажатии кнопки "Спросить" вызываем функцию
         self.ui.LangSwitcher.clicked.connect(self.LangSwitch)
@@ -76,20 +80,22 @@ class mywindow(QtWidgets.QMainWindow):
         self.cust = dialog_win()
         if self.cust.exec_():
             print('get')
-        print("Clicked ASK")
 
     def Check_Answer(self, state):
         if state == QtCore.Qt.Checked:
-            print("BoxEnable")
-        else:
-            print("BoxDisable")
+            self.spinboxChanged()
 
-    def spinboxChanged(self, value):
-        print('New value of spinbox is:', value)
-        if value == 21:
-            print("Нужно дополнительное условие")
+    def spinboxChanged(self, value=0):
+        # print('New value of spinbox is:', value)
+        self.ask_time(value)
 
-    def keyPressEvent(self, event):                             # Функция чтения клавишь Return & Enter
+    def ask_time(self, value):
+        if value == 0:
+            self.cust = dialog_win()
+            if self.cust.exec_():
+                pass
+
+    def keyPressEvent(self, event):                     # Функция чтения клавишь Return & Enter
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь
             self.CheckLangBoxes()                               # Вызываем функцию      #       Return & Enter
 
@@ -100,56 +106,86 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.Languages_1.setCurrentIndex(idxLang2)                               # Меняем языки местами по индексу
         self.ui.Languages_2.setCurrentIndex(idxLang1)                               # Меняем языки местами по индексу
 
-    def GrayLang(self, lang1="English"):                # Функция делает неактивными язык в ComboBox (Запускаеться 1раз)
-        model = self.ui.Languages_2.model()  # QStandardItemModel, метод model.item возвращает объекты QStandardItem
+    # ФУНКЦИЯ GrayLang РАБОТАЕТ КРИВО!!!(Срабатывает только при нажатии "Перевести" или Enter)
+    def GrayLang(self, lang1="English"):      # Функция делает неактивными язык в ComboBox (Запускаеться 1раз)
+        model = self.ui.Languages_2.model()   # QStandardItemModel, метод model.item возвращает объекты QStandardItem
         model.item(0).setEnabled(True)
         model.item(1).setEnabled(True)
         model.item(2).setEnabled(True)
         idxLang1 = self.ui.Languages_1.findText(lang1)  # Получаем индекс активного языка
         model.item(idxLang1).setEnabled(False)          # Указываем какие элементы сделать невыбираемыми
 
-    def CheckInternet(self):
+    # ФУНКЦИЯ CheckInternet РАБОТАЕТ КРИВО!!!(Проблемы с обратным подключением и ещё...)
+    def CheckInternet(self):                            # Функция проверки подключения к инету
         conn = httplib.HTTPConnection("www.google.com")
         try:
             conn.request("HEAD", "/")
             self.ui.LineTranslate_1.setEnabled(True)
             return "Connected"
         except:
-            while False:
-                self.ui.LineTranslate_1.setEnabled(False)
-                # self.CheckInternet()
-            print("Disconnected")
+            self.ui.LineTranslate_1.setEnabled(False)
 
-    def Write(self, word, translateText):
+    def Write(self, word, translateText):               # Функция чтения\записи переведённых слов
         list = []
-        WriteWord = word + " --> " + translateText + "\n"
+        WriteWord = word + " --> " + translateText + "\n"   # Склеиваем слова для записи (Перевести --> Перевод \n)
 
-        with open("BD_Word.txt", "r") as BD_Word:  # Открываем файл на чтение
-            for i in BD_Word:
-                list.append(i)
-            # print(list)
-        with open("BD_Word.txt", 'a') as BD_Word:
-            FuzzCoef = fuzz_p.extractOne(WriteWord, list)
-            if FuzzCoef[1] < 100:
-                BD_Word.write(WriteWord)
+        with open("BD_Word.txt", "r") as BD_Word:       # Открываем файл на чтение
+            for i in BD_Word:                           # Читаем файл построчно
+                list.append(i)                          # Записываем каждую строку в список
+
+        with open("BD_Word.txt", 'a') as BD_Word:       # Открываем файл на дозапись
+            FuzzCoef = fuzz_p.extractOne(WriteWord, list)   # Выполняем нечёткое сравнение слов
+            if FuzzCoef[1] < 100:                       # Если не нашлось похожих слов то записываем
+                BD_Word.write(WriteWord)                # Записываем слово в словарь
+
+    # Нужно доработать эту функцию либо удалить к ххх
+    def mousePressEvent(self, event):
+        button = event.button()
+        self.GrayLang()
+        if button == Qt.Qt.RightButton:
+            print("Right button click!")
+
+        elif button == Qt.Qt.LeftButton:
+            print("Left button click!")
+
+        # return Qt.QPushButton.mousePressEvent(self, event)
 
 
 class dialog_win(QDialog):
     def __init__(self):
+        # Setup
         super(dialog_win, self).__init__()
 
         self.ASKui = Ui_ASKDialogWin()
         self.ASKui.setupUi(self)
+
         list = []
 
-        with open('BD_Word.txt', mode="r") as BD_Word:
-            for line in BD_Word.readlines():
-                list.append(line)
-            print(list)
-        RandWord = list[rd.randint(0, len(list))]
-        Word = RandWord.partition(' --> ')[-3]
+        with open('BD_Word.txt', mode="r") as BD_Word:  # Открываем файл на чтение
+            for line in BD_Word.readlines():            # Читаем файл построчно
+                list.append(line)                       # Записываем слова в список
 
-        self.ASKui.ASKWord.setText(Word)
+        RandWord = list[rd.randint(0, len(list))]       # Выбераем рандомное слово из списка
+        Word = RandWord.partition(' --> ')[-3]          # Убераем вторую половину слова (Перевод)
+        self.Word1 = RandWord.partition(' --> ')[2]     # Убираем первую чась
+        self.Word1 = self.Word1[:-1]                    # Убираем из слова "\n"
+        self.ASKui.ASKWord.setText(Word)                # Вписываем слово в QEditLine
+
+    def CheckTransWord(self):                           # Проверка правельности перевода
+        Translate = self.ASKui.ASKWordTrans.text()      # Записываем в переменную перевод который вписали в QEditLine
+        FuzzCoef = fuzz.token_sort_ratio(self.Word1, Translate)     # Выполняем нечёткое сравнение слов
+        try:                                            # Отлов ошибки пустой QEditLine
+            if FuzzCoef >= 90:                          # Если коэф. схожести слов >= 90
+                print("Слово совпадает")
+            else:                                       # Иначе ...
+                print("Слово не совпадает")
+        except TypeError:
+            self.ASKui.ASKWordTrans.setPlaceholderText("Введите перевод!!!")    # Если стройка ввода была пустой
+
+    def keyPressEvent(self, event):                             # Функция чтения клавишь Return & Enter
+        if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь
+            self.CheckTransWord()                               # Вызов функции проверки перевода
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
@@ -157,5 +193,7 @@ if __name__ == "__main__":
     application.show()
 
     sys.exit(app.exec())
+
+
 # Made by DeSkreeツ
 # :)
