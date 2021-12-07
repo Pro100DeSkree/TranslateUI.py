@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>ASKDialogWin</class>
+ <widget class="QDialog" name="ASKDialogWin">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -22,16 +22,16 @@
      <height>41</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="AllLineWord">
     <item>
-     <widget class="QLineEdit" name="ASKWord">
+     <widget class="QLineEdit" name="LineASKWord">
       <property name="readOnly">
        <bool>true</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="ASKWordTrans">
+     <widget class="QLineEdit" name="LineASKWordTrans">
       <property name="placeholderText">
        <string>Translate</string>
       </property>
@@ -42,24 +42,31 @@
   <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>166</x>
+     <x>7</x>
      <y>57</y>
-     <width>201</width>
+     <width>361</width>
      <height>41</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QHBoxLayout" name="AllButton">
     <item>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="PB_Cancellation">
+      <property name="text">
+       <string>Хз</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="PB_Verify">
       <property name="text">
        <string>Проверить</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="PB_Next_words">
       <property name="text">
-       <string>Хз</string>
+       <string>Следующий</string>
       </property>
      </widget>
     </item>

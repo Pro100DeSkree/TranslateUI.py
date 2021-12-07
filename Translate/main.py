@@ -22,15 +22,12 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.LineTranslate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.LineTranslate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
-        # self.ui.ConnReload.clicked.connect(self.CheckInternet())
-        self.ui.Translate.clicked.connect(self.CheckLangBoxes)         # При нажатии кнопки "Перевод" вызываем функцию
-        self.ui.ASK_Button.clicked.connect(self.ASKClicked)            # При нажатии кнопки "Спросить" вызываем функцию
-        self.ui.LangSwitcher.clicked.connect(self.LangSwitch)
-        self.ui.ASK_CheckBox.stateChanged.connect(self.Check_Answer)   # Подключение ЧекБокса "Спаршивать переодически"
-        self.ui.TimeSpinBox.valueChanged.connect(self.spinboxChanged)  # Подключение SpinBox "Интервал между вопросами"
-        self.ui.Languages_1.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox1
-        self.ui.Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
-        self.ui.Languages_2.setCurrentIndex(1)
+        self.ui.PB_Translate.clicked.connect(self.CheckLangBoxes)         # При нажатии кнопки "Перевод" вызываем функцию
+        self.ui.PB_ASK.clicked.connect(self.ASKClicked)            # При нажатии кнопки "Спросить" вызываем функцию
+        self.ui.PB_LangSwitcher.clicked.connect(self.LangSwitch)
+        self.ui.CB_Languages_1.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox1
+        self.ui.CB_Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
+        self.ui.CB_Languages_2.setCurrentIndex(1)
         self.GrayLang()
         self.CheckInternet()
         # self.ui.ByDeSkree.setText("By DeSkree")
@@ -56,8 +53,8 @@ class mywindow(QtWidgets.QMainWindow):
             self.CheckInternet()
 
     def CheckLangBoxes(self):                                   # Функция чтения с ComboBox и передачей в translate()
-        lang1 = self.ui.Languages_1.currentText()               # Получаем значение с ComboBox
-        lang2 = self.ui.Languages_2.currentText()               # Получаем значение с ComboBox
+        lang1 = self.ui.CB_Languages_1.currentText()               # Получаем значение с ComboBox
+        lang2 = self.ui.CB_Languages_2.currentText()               # Получаем значение с ComboBox
 
         if lang1 == "English":
             lang1_1 = 'en'
@@ -81,38 +78,25 @@ class mywindow(QtWidgets.QMainWindow):
         if self.cust.exec_():
             print('get')
 
-    def Check_Answer(self, state):
-        if state == QtCore.Qt.Checked:
-            self.spinboxChanged()
-
-    def spinboxChanged(self, value=0):
-        # print('New value of spinbox is:', value)
-        self.ask_time(value)
-
-    def ask_time(self, value):
-        if value == 0:
-            self.cust = dialog_win()
-            if self.cust.exec_():
-                pass
-
     def keyPressEvent(self, event):                     # Функция чтения клавишь Return & Enter
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь
             self.CheckLangBoxes()                               # Вызываем функцию      #       Return & Enter
 
     def LangSwitch(self):                               # Функция смены языков местами
-        idxLang1 = self.ui.Languages_1.findText(self.ui.Languages_1.currentText())  # Получаем индекс активного языка
-        idxLang2 = self.ui.Languages_2.findText(self.ui.Languages_2.currentText())  # Получаем индекс активного языка
+        # Получаем индекс активного языка
+        idxLang1 = self.ui.CB_Languages_1.findText(self.ui.CB_Languages_1.currentText())
+        idxLang2 = self.ui.CB_Languages_2.findText(self.ui.CB_Languages_2.currentText())
 
-        self.ui.Languages_1.setCurrentIndex(idxLang2)                               # Меняем языки местами по индексу
-        self.ui.Languages_2.setCurrentIndex(idxLang1)                               # Меняем языки местами по индексу
+        self.ui.CB_Languages_1.setCurrentIndex(idxLang2)                               # Меняем языки местами по индексу
+        self.ui.CB_Languages_2.setCurrentIndex(idxLang1)                               # Меняем языки местами по индексу
 
     # ФУНКЦИЯ GrayLang РАБОТАЕТ КРИВО!!!(Срабатывает только при нажатии "Перевести" или Enter)
     def GrayLang(self, lang1="English"):      # Функция делает неактивными язык в ComboBox (Запускаеться 1раз)
-        model = self.ui.Languages_2.model()   # QStandardItemModel, метод model.item возвращает объекты QStandardItem
+        model = self.ui.CB_Languages_2.model()   # QStandardItemModel, метод model.item возвращает объекты QStandardItem
         model.item(0).setEnabled(True)
         model.item(1).setEnabled(True)
         model.item(2).setEnabled(True)
-        idxLang1 = self.ui.Languages_1.findText(lang1)  # Получаем индекс активного языка
+        idxLang1 = self.ui.CB_Languages_1.findText(lang1)  # Получаем индекс активного языка
         model.item(idxLang1).setEnabled(False)          # Указываем какие элементы сделать невыбираемыми
 
     # ФУНКЦИЯ CheckInternet РАБОТАЕТ КРИВО!!!(Проблемы с обратным подключением и ещё...)
@@ -169,10 +153,10 @@ class dialog_win(QDialog):
         Word = RandWord.partition(' --> ')[-3]          # Убераем вторую половину слова (Перевод)
         self.Word1 = RandWord.partition(' --> ')[2]     # Убираем первую чась
         self.Word1 = self.Word1[:-1]                    # Убираем из слова "\n"
-        self.ASKui.ASKWord.setText(Word)                # Вписываем слово в QEditLine
+        self.ASKui.LineASKWord.setText(Word)                # Вписываем слово в QEditLine
 
     def CheckTransWord(self):                           # Проверка правельности перевода
-        Translate = self.ASKui.ASKWordTrans.text()      # Записываем в переменную перевод который вписали в QEditLine
+        Translate = self.ASKui.LineASKWordTrans.text()      # Записываем в переменную перевод который вписали в QEditLine
         FuzzCoef = fuzz.token_sort_ratio(self.Word1, Translate)     # Выполняем нечёткое сравнение слов
         try:                                            # Отлов ошибки пустой QEditLine
             if FuzzCoef >= 90:                          # Если коэф. схожести слов >= 90
@@ -180,7 +164,7 @@ class dialog_win(QDialog):
             else:                                       # Иначе ...
                 print("Слово не совпадает")
         except TypeError:
-            self.ASKui.ASKWordTrans.setPlaceholderText("Введите перевод!!!")    # Если стройка ввода была пустой
+            self.ASKui.LineASKWordTrans.setPlaceholderText("Введите перевод!!!")    # Если стройка ввода была пустой
 
     def keyPressEvent(self, event):                             # Функция чтения клавишь Return & Enter
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь

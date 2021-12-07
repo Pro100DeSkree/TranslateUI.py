@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>547</width>
-    <height>191</height>
+    <height>148</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -39,13 +39,13 @@
      <item row="0" column="1">
       <layout class="QGridLayout" name="LanguagesBox">
        <item row="1" column="2">
-        <widget class="QComboBox" name="Languages_2"/>
+        <widget class="QComboBox" name="CB_Languages_2"/>
        </item>
        <item row="1" column="0">
-        <widget class="QComboBox" name="Languages_1"/>
+        <widget class="QComboBox" name="CB_Languages_1"/>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="LangSwitcher">
+        <widget class="QPushButton" name="PB_LangSwitcher">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -76,7 +76,7 @@
       </layout>
      </item>
      <item row="0" column="0">
-      <widget class="QPushButton" name="ASK_Button">
+      <widget class="QPushButton" name="PB_ASK">
        <property name="maximumSize">
         <size>
          <width>120</width>
@@ -89,7 +89,7 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QPushButton" name="Translate">
+      <widget class="QPushButton" name="PB_Translate">
        <property name="maximumSize">
         <size>
          <width>120</width>
@@ -215,56 +215,6 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>123</y>
-      <width>263</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QSpinBox" name="TimeSpinBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="sizeIncrement">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximum">
-        <number>60</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="ASK_CheckBox">
-       <property name="text">
-        <string>Спрашивать переодически</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QLabel" name="ByDeSkree">
     <property name="geometry">
      <rect>
@@ -286,37 +236,6 @@
     </property>
     <property name="text">
      <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="ConnReload">
-    <property name="geometry">
-     <rect>
-      <x>2</x>
-      <y>125</y>
-      <width>31</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-      <kerning>false</kerning>
-     </font>
-    </property>
-    <property name="text">
-     <string>🔃</string>
-    </property>
-    <property name="checkable">
-     <bool>false</bool>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-    <property name="autoRepeat">
-     <bool>false</bool>
-    </property>
-    <property name="autoExclusive">
-     <bool>false</bool>
     </property>
    </widget>
   </widget>
