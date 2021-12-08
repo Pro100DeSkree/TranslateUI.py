@@ -9,7 +9,7 @@ from threading import Thread          # Подключаем потоки
 import random as rd                          # Импортируем модуль рандом
 import sys                                   # Импортируем модуль system
 import http.client as httplib
-import time
+from time import sleep
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -28,8 +28,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.CB_Languages_1.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox1
         self.ui.CB_Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
         self.ui.CB_Languages_2.setCurrentIndex(1)
-        self.GrayLang()
         th_ch_internet = Thread(target=self.thread_internet_check, args=(), daemon=True)  # Создаём новый поток
+        th_ch_GrayLang = Thread(target=self.GrayLang, args=(), daemon=True)               # Создаём новый поток
+        th_ch_GrayLang.start()
         th_ch_internet.start()
 
         # self.ui.ByDeSkree.setText("By DeSkree")
@@ -72,17 +73,7 @@ class mywindow(QtWidgets.QMainWindow):
         else:
             lang1_2 = 'uk'
 
-        self.GrayLang(lang1)
         self.translate(lang1_1, lang1_2)                        # Вызываем функцию с параметрами языков
-
-    # ФУНКЦИЯ GrayLang РАБОТАЕТ КРИВО!!!(Срабатывает только при нажатии "Перевести" или Enter)
-    def GrayLang(self, lang1="English"):  # Функция делает неактивными язык в ComboBox (Запускаеться 1раз)
-        model = self.ui.CB_Languages_2.model()  # QStandardItemModel, метод model.item возвращает объекты QStandardItem
-        model.item(0).setEnabled(True)
-        model.item(1).setEnabled(True)
-        model.item(2).setEnabled(True)
-        idxLang1 = self.ui.CB_Languages_1.findText(lang1)  # Получаем индекс активного языка
-        model.item(idxLang1).setEnabled(False)  # Указываем какие элементы сделать невыбираемыми
 
     def ASKClicked(self):
         self.cust = dialog_win()
@@ -127,16 +118,35 @@ class mywindow(QtWidgets.QMainWindow):
             print("Left button click!")
 
         # return Qt.QPushButton.mousePressEvent(self, event)
+
+    # МНОГОПОТОЧНЫЕ ФУНКИИ
     def thread_internet_check(self):
-        Check = True
-        while Check:
-            time.sleep(1)
+        while True:
+            sleep(1)
             conn = httplib.HTTPConnection("www.google.com")
             try:
                 conn.request("HEAD", "/")
                 self.ui.LineTranslate_1.setEnabled(True)
             except:
                 self.ui.LineTranslate_1.setEnabled(False)
+
+    def GrayLang(self):
+        idxLang1_1 = 0
+        model = self.ui.CB_Languages_2.model()
+        model.item(0).setEnabled(False)
+        while True:
+            sleep(1)
+            idxLang1 = self.ui.CB_Languages_1.findText(self.ui.CB_Languages_1.currentText())  # Получаем индекс активного языка
+            idxLang2 = self.ui.CB_Languages_2.findText(self.ui.CB_Languages_2.currentText())
+            if idxLang1 != idxLang1_1:
+                model = self.ui.CB_Languages_2.model()  # QStandardItemModel, метод model.item возвращает объекты QStandardItem
+                model.item(0).setEnabled(True)
+                model.item(1).setEnabled(True)
+                model.item(2).setEnabled(True)
+                model.item(idxLang1).setEnabled(False)  # Указываем какие элементы сделать невыбираемыми
+                if idxLang1 == idxLang2:
+                    self.ui.CB_Languages_2.setCurrentIndex(idxLang1_1)
+                idxLang1_1 = idxLang1
 
 
 class dialog_win(QDialog):
