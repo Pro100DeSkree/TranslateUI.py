@@ -122,6 +122,7 @@ class mywindow(QtWidgets.QMainWindow):
             if ConnOrDisconn == "Connected":
                 Check = False
 
+
     def Write(self, word, translateText):               # Функция чтения\записи переведённых слов
         list = []
         WriteWord = word + " --> " + translateText + "\n"   # Склеиваем слова для записи (Перевести --> Перевод \n)
