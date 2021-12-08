@@ -9,8 +9,8 @@ from threading import Thread          # Подключаем потоки
 import random as rd                          # Импортируем модуль рандом
 import sys                                   # Импортируем модуль system
 import http.client as httplib
-
-
+import time
+from threading import *
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -23,22 +23,23 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.LineTranslate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.LineTranslate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
-        self.ui.PB_Translate.clicked.connect(self.CheckLangBoxes)      # При нажатии кнопки "Перевод" вызываем функцию
-        self.ui.PB_ASK.clicked.connect(self.ASKClicked)                # При нажатии кнопки "Спросить" вызываем функцию
+        self.ui.PB_Translate.clicked.connect(self.CheckLangBoxes)         # При нажатии кнопки "Перевод" вызываем функцию
+        self.ui.PB_ASK.clicked.connect(self.ASKClicked)            # При нажатии кнопки "Спросить" вызываем функцию
         self.ui.PB_LangSwitcher.clicked.connect(self.LangSwitch)
         self.ui.CB_Languages_1.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox1
         self.ui.CB_Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
         self.ui.CB_Languages_2.setCurrentIndex(1)
         self.GrayLang()
-        self.CheckInternet()
+        th = Thread(target=self.thread_internet_check(), args=())  # Создаём новый поток
+        th.start()
 
         # self.ui.ByDeSkree.setText("By DeSkree")
 
     # Function
     def translate(self, lang1, lang2):                                      # Функция реагирования на клик
-        ConnOrDisconn = self.CheckInternet()
+        # ConnOrDisconn = self.CheckInternet()
 
-        if ConnOrDisconn == "Connected":
+        if "Connected" == "Connected":
             word = self.ui.LineTranslate_1.text()                                   # Вывод содержимого поля 1
             try:
                 translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
@@ -55,8 +56,8 @@ class mywindow(QtWidgets.QMainWindow):
             self.CheckInternet()
 
     def CheckLangBoxes(self):                                   # Функция чтения с ComboBox и передачей в translate()
-        lang1 = self.ui.CB_Languages_1.currentText()            # Получаем значение с ComboBox
-        lang2 = self.ui.CB_Languages_2.currentText()            # Получаем значение с ComboBox
+        lang1 = self.ui.CB_Languages_1.currentText()               # Получаем значение с ComboBox
+        lang2 = self.ui.CB_Languages_2.currentText()               # Получаем значение с ComboBox
 
         if lang1 == "English":
             lang1_1 = 'en'
@@ -107,9 +108,19 @@ class mywindow(QtWidgets.QMainWindow):
         try:
             conn.request("HEAD", "/")
             self.ui.LineTranslate_1.setEnabled(True)
+            print("Yes")
             return "Connected"
         except:
             self.ui.LineTranslate_1.setEnabled(False)
+            # self.CheckInternet()
+
+    def thread_internet_check(self):
+        Check = True
+        while Check:
+            print("Not_Not")
+            ConnOrDisconn = self.CheckInternet()
+            if ConnOrDisconn == "Connected":
+                Check = False
 
     def Write(self, word, translateText):               # Функция чтения\записи переведённых слов
         list = []
@@ -158,7 +169,7 @@ class dialog_win(QDialog):
         self.ASKui.LineASKWord.setText(Word)                # Вписываем слово в QEditLine
 
     def CheckTransWord(self):                           # Проверка правельности перевода
-        Translate = self.ASKui.LineASKWordTrans.text()      # Записываем в переменную перевод который вписали в QEditLine
+        Translate = self.ASKui.LineASKWordTrans.text()  # Записываем в переменную перевод который вписали в QEditLine
         FuzzCoef = fuzz.token_sort_ratio(self.Word1, Translate)     # Выполняем нечёткое сравнение слов
         try:                                            # Отлов ошибки пустой QEditLine
             if FuzzCoef >= 90:                          # Если коэф. схожести слов >= 90
@@ -174,11 +185,11 @@ class dialog_win(QDialog):
 
 
 if __name__ == "__main__":
-    th = Thread(target=remind, args=())  # Создаём новый поток
-    th.start()  # И запускаем его
     app = QtWidgets.QApplication([])
     application = mywindow()
     application.show()
+
+
 
     sys.exit(app.exec())
 
