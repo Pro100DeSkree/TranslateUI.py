@@ -5,11 +5,12 @@ from ASKWin import Ui_ASKDialogWin           # Импорт Диалоговог
 from googletrans import Translator           # Импортируем гугл переводчик
 from fuzzywuzzy import process as fuzz_p     # Импортируем модуль нечёткого сравнения
 from fuzzywuzzy import fuzz
+from threading import Thread          # Подключаем потоки
 import random as rd                          # Импортируем модуль рандом
 import sys                                   # Импортируем модуль system
 import http.client as httplib
-import time
-from threading import *
+
+
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -22,14 +23,15 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.LineTranslate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.LineTranslate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
-        self.ui.PB_Translate.clicked.connect(self.CheckLangBoxes)         # При нажатии кнопки "Перевод" вызываем функцию
-        self.ui.PB_ASK.clicked.connect(self.ASKClicked)            # При нажатии кнопки "Спросить" вызываем функцию
+        self.ui.PB_Translate.clicked.connect(self.CheckLangBoxes)      # При нажатии кнопки "Перевод" вызываем функцию
+        self.ui.PB_ASK.clicked.connect(self.ASKClicked)                # При нажатии кнопки "Спросить" вызываем функцию
         self.ui.PB_LangSwitcher.clicked.connect(self.LangSwitch)
         self.ui.CB_Languages_1.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox1
         self.ui.CB_Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
         self.ui.CB_Languages_2.setCurrentIndex(1)
         self.GrayLang()
         self.CheckInternet()
+
         # self.ui.ByDeSkree.setText("By DeSkree")
 
     # Function
@@ -53,8 +55,8 @@ class mywindow(QtWidgets.QMainWindow):
             self.CheckInternet()
 
     def CheckLangBoxes(self):                                   # Функция чтения с ComboBox и передачей в translate()
-        lang1 = self.ui.CB_Languages_1.currentText()               # Получаем значение с ComboBox
-        lang2 = self.ui.CB_Languages_2.currentText()               # Получаем значение с ComboBox
+        lang1 = self.ui.CB_Languages_1.currentText()            # Получаем значение с ComboBox
+        lang2 = self.ui.CB_Languages_2.currentText()            # Получаем значение с ComboBox
 
         if lang1 == "English":
             lang1_1 = 'en'
@@ -172,6 +174,8 @@ class dialog_win(QDialog):
 
 
 if __name__ == "__main__":
+    th = Thread(target=remind, args=())  # Создаём новый поток
+    th.start()  # И запускаем его
     app = QtWidgets.QApplication([])
     application = mywindow()
     application.show()
