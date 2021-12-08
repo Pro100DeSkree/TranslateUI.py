@@ -10,7 +10,6 @@ import random as rd                          # Импортируем модул
 import sys                                   # Импортируем модуль system
 import http.client as httplib
 import time
-from threading import *
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -30,8 +29,8 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.CB_Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
         self.ui.CB_Languages_2.setCurrentIndex(1)
         self.GrayLang()
-        th = Thread(target=self.thread_internet_check(), args=())  # Создаём новый поток
-        th.start()
+        th_ch_internet = Thread(target=self.thread_internet_check, args=(), daemon=True)  # Создаём новый поток
+        th_ch_internet.start()
 
         # self.ui.ByDeSkree.setText("By DeSkree")
 
@@ -76,6 +75,15 @@ class mywindow(QtWidgets.QMainWindow):
         self.GrayLang(lang1)
         self.translate(lang1_1, lang1_2)                        # Вызываем функцию с параметрами языков
 
+    # ФУНКЦИЯ GrayLang РАБОТАЕТ КРИВО!!!(Срабатывает только при нажатии "Перевести" или Enter)
+    def GrayLang(self, lang1="English"):  # Функция делает неактивными язык в ComboBox (Запускаеться 1раз)
+        model = self.ui.CB_Languages_2.model()  # QStandardItemModel, метод model.item возвращает объекты QStandardItem
+        model.item(0).setEnabled(True)
+        model.item(1).setEnabled(True)
+        model.item(2).setEnabled(True)
+        idxLang1 = self.ui.CB_Languages_1.findText(lang1)  # Получаем индекс активного языка
+        model.item(idxLang1).setEnabled(False)  # Указываем какие элементы сделать невыбираемыми
+
     def ASKClicked(self):
         self.cust = dialog_win()
         if self.cust.exec_():
@@ -93,36 +101,6 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.CB_Languages_1.setCurrentIndex(idxLang2)                               # Меняем языки местами по индексу
         self.ui.CB_Languages_2.setCurrentIndex(idxLang1)                               # Меняем языки местами по индексу
 
-    # ФУНКЦИЯ GrayLang РАБОТАЕТ КРИВО!!!(Срабатывает только при нажатии "Перевести" или Enter)
-    def GrayLang(self, lang1="English"):      # Функция делает неактивными язык в ComboBox (Запускаеться 1раз)
-        model = self.ui.CB_Languages_2.model()   # QStandardItemModel, метод model.item возвращает объекты QStandardItem
-        model.item(0).setEnabled(True)
-        model.item(1).setEnabled(True)
-        model.item(2).setEnabled(True)
-        idxLang1 = self.ui.CB_Languages_1.findText(lang1)  # Получаем индекс активного языка
-        model.item(idxLang1).setEnabled(False)          # Указываем какие элементы сделать невыбираемыми
-
-    # ФУНКЦИЯ CheckInternet РАБОТАЕТ КРИВО!!!(Проблемы с обратным подключением и ещё...)
-    def CheckInternet(self):                            # Функция проверки подключения к инету
-        conn = httplib.HTTPConnection("www.google.com")
-        try:
-            conn.request("HEAD", "/")
-            self.ui.LineTranslate_1.setEnabled(True)
-            print("Yes")
-            return "Connected"
-        except:
-            self.ui.LineTranslate_1.setEnabled(False)
-            # self.CheckInternet()
-
-    def thread_internet_check(self):
-        Check = True
-        while Check:
-            print("Not_Not")
-            ConnOrDisconn = self.CheckInternet()
-            if ConnOrDisconn == "Connected":
-                Check = False
-
-
     def Write(self, word, translateText):               # Функция чтения\записи переведённых слов
         list = []
         WriteWord = word + " --> " + translateText + "\n"   # Склеиваем слова для записи (Перевести --> Перевод \n)
@@ -137,6 +115,8 @@ class mywindow(QtWidgets.QMainWindow):
                 BD_Word.write(WriteWord)                # Записываем слово в словарь
 
     # Нужно доработать эту функцию либо удалить к ххх
+
+
     def mousePressEvent(self, event):
         button = event.button()
         self.GrayLang()
@@ -147,6 +127,16 @@ class mywindow(QtWidgets.QMainWindow):
             print("Left button click!")
 
         # return Qt.QPushButton.mousePressEvent(self, event)
+    def thread_internet_check(self):
+        Check = True
+        while Check:
+            time.sleep(1)
+            conn = httplib.HTTPConnection("www.google.com")
+            try:
+                conn.request("HEAD", "/")
+                self.ui.LineTranslate_1.setEnabled(True)
+            except:
+                self.ui.LineTranslate_1.setEnabled(False)
 
 
 class dialog_win(QDialog):
@@ -189,11 +179,7 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication([])
     application = mywindow()
     application.show()
-
-
-
     sys.exit(app.exec())
-
 
 # Made by DeSkreeツ
 # :)
