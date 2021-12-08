@@ -1,15 +1,15 @@
-from PyQt5 import QtWidgets, QtCore, Qt          # Импортируем Qt5
+from PyQt5 import QtWidgets, QtCore, Qt      # Импортируем Qt5
 from PyQt5.QtWidgets import *
 from TranslateUI import Ui_TranslateAPP      # Импорт Главного интерфейса
 from ASKWin import Ui_ASKDialogWin           # Импорт Диалогового интерфейса(ASK)
 from googletrans import Translator           # Импортируем гугл переводчик
 from fuzzywuzzy import process as fuzz_p     # Импортируем модуль нечёткого сравнения
-from fuzzywuzzy import fuzz
-from threading import Thread          # Подключаем потоки
+from fuzzywuzzy import fuzz                  # Импортируем модуль нечёткого сравнения
+from threading import Thread                 # Импортируем модуль многопоточности
 import random as rd                          # Импортируем модуль рандом
 import sys                                   # Импортируем модуль system
-import http.client as httplib
-from time import sleep
+import http.client as httplib                # Импортируем модуль (Хз что за моуль) для порверки подключения к сети
+from time import sleep                       # Импортируем модуль сна
 
 
 class mywindow(QtWidgets.QMainWindow):
@@ -22,40 +22,34 @@ class mywindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.ui.LineTranslate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.LineTranslate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
-        self.ui.PB_Translate.clicked.connect(self.CheckLangBoxes)         # При нажатии кнопки "Перевод" вызываем функцию
-        self.ui.PB_ASK.clicked.connect(self.ASKClicked)            # При нажатии кнопки "Спросить" вызываем функцию
-        self.ui.PB_LangSwitcher.clicked.connect(self.LangSwitch)
-        self.ui.CB_Languages_1.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox1
-        self.ui.CB_Languages_2.addItems(["English", "Russian", "Ukraine"])     # Список языков в QComboBox2
-        self.ui.CB_Languages_2.setCurrentIndex(1)
+        self.ui.PB_Translate.clicked.connect(self.CheckLangBoxes)      # При нажатии кнопки "Перевод" вызываем функцию
+        self.ui.PB_ASK.clicked.connect(self.ASKClicked)                # При нажатии кнопки "Спросить" вызываем функцию
+        self.ui.PB_LangSwitcher.clicked.connect(self.LangSwitch)               # Кнопка смены языка
+        self.ui.CB_Languages_1.addItems(["English", "Russian", "Ukraine"])     # Задаём список языков в QComboBox1
+        self.ui.CB_Languages_2.addItems(["English", "Russian", "Ukraine"])     # Задаём список языков в QComboBox2
+        self.ui.CB_Languages_2.setCurrentIndex(1)                              # Устанавливаем язык в ComboBox
         th_ch_internet = Thread(target=self.thread_internet_check, args=(), daemon=True)  # Создаём новый поток
-        th_ch_GrayLang = Thread(target=self.GrayLang, args=(), daemon=True)               # Создаём новый поток
-        th_ch_GrayLang.start()
-        th_ch_internet.start()
-
-        # self.ui.ByDeSkree.setText("By DeSkree")
+        th_ch_GrayLang = Thread(target=self.GrayLang, args=(), daemon=True)               # Создаём ещё один новый поток
+        th_ch_GrayLang.start()                      # Запускаем поток проверки ComboBox-ов на смену языков
+        th_ch_internet.start()                      # Запускаме поток проверки подключения к интернету
+        # self.ui.ByDeSkree.setText("By DeSkree")   # Моя роспись в программе
 
     # Function
-    def translate(self, lang1, lang2):                                      # Функция реагирования на клик
-        # ConnOrDisconn = self.CheckInternet()
+    def translate(self, lang1, lang2):                                          # Функция реагирования на клик
+        word = self.ui.LineTranslate_1.text()                                   # Вывод содержимого поля 1
+        try:
+            translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
+            translateText = translate.text                                      # Получаем слово с перевода
+            self.ui.LineTranslate_2.setText(translateText)                      # Вывод перевода
 
-        if "Connected" == "Connected":
-            word = self.ui.LineTranslate_1.text()                                   # Вывод содержимого поля 1
-            try:
-                translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
-                translateText = translate.text                                      # Получаем слово с перевода
-                self.ui.LineTranslate_2.setText(translateText)                      # Вывод перевода
+            if lang1 != 'uk' and lang2 != 'uk':
+                if word != translateText:
+                    self.Write(word, translateText)
 
-                if lang1 != 'uk' and lang2 != 'uk':
-                    if word != translateText:
-                        self.Write(word, translateText)
+        except TypeError:
+            self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")
 
-            except TypeError:
-                self.ui.LineTranslate_1.setPlaceholderText("Введите слово!!!")
-        else:
-            self.CheckInternet()
-
-    def CheckLangBoxes(self):                                   # Функция чтения с ComboBox и передачей в translate()
+    def CheckLangBoxes(self):                                      # Функция чтения с ComboBox и передачей в translate()
         lang1 = self.ui.CB_Languages_1.currentText()               # Получаем значение с ComboBox
         lang2 = self.ui.CB_Languages_2.currentText()               # Получаем значение с ComboBox
 
@@ -76,23 +70,23 @@ class mywindow(QtWidgets.QMainWindow):
         self.translate(lang1_1, lang1_2)                        # Вызываем функцию с параметрами языков
 
     def ASKClicked(self):
-        self.cust = dialog_win()
-        if self.cust.exec_():
+        self.cust = dialog_win()                        # Вызов класса диалогового окна
+        if self.cust.exec_():                           # Честно, хз что это и зачем))) Пусть будет))
             print('get')
 
     def keyPressEvent(self, event):                     # Функция чтения клавишь Return & Enter
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь
-            self.CheckLangBoxes()                               # Вызываем функцию      #       Return & Enter
+            self.CheckLangBoxes()                       # Вызываем функцию              #       Return & Enter
 
     def LangSwitch(self):                               # Функция смены языков местами
         # Получаем индекс активного языка
         idxLang1 = self.ui.CB_Languages_1.findText(self.ui.CB_Languages_1.currentText())
         idxLang2 = self.ui.CB_Languages_2.findText(self.ui.CB_Languages_2.currentText())
 
-        self.ui.CB_Languages_1.setCurrentIndex(idxLang2)                               # Меняем языки местами по индексу
-        self.ui.CB_Languages_2.setCurrentIndex(idxLang1)                               # Меняем языки местами по индексу
+        self.ui.CB_Languages_1.setCurrentIndex(idxLang2)    # Меняем языки местами по индексу
+        self.ui.CB_Languages_2.setCurrentIndex(idxLang1)    # Меняем языки местами по индексу
 
-    def Write(self, word, translateText):               # Функция чтения\записи переведённых слов
+    def Write(self, word, translateText):                   # Функция чтения\записи переведённых слов
         list = []
         WriteWord = word + " --> " + translateText + "\n"   # Склеиваем слова для записи (Перевести --> Перевод \n)
 
@@ -106,8 +100,6 @@ class mywindow(QtWidgets.QMainWindow):
                 BD_Word.write(WriteWord)                # Записываем слово в словарь
 
     # Нужно доработать эту функцию либо удалить к ххх
-
-
     def mousePressEvent(self, event):
         button = event.button()
         self.GrayLang()
@@ -116,36 +108,41 @@ class mywindow(QtWidgets.QMainWindow):
 
         elif button == Qt.Qt.LeftButton:
             print("Left button click!")
-
         # return Qt.QPushButton.mousePressEvent(self, event)
 
     # МНОГОПОТОЧНЫЕ ФУНКИИ
+    # Функция проверки интернета     !!!ЕСТЬ БАГ!!! При восстановлении подключения иногда УИ может зависнуть намертво
     def thread_internet_check(self):
         while True:
             sleep(1)
             conn = httplib.HTTPConnection("www.google.com")
             try:
                 conn.request("HEAD", "/")
-                self.ui.LineTranslate_1.setEnabled(True)
+                self.ui.LineTranslate_1.setEnabled(True)    # Обратное включение строки ввода "Translatable"
+                print("Есть инте")                          # Принт для дебага (Того самого {Строка 114 описано})
             except:
-                self.ui.LineTranslate_1.setEnabled(False)
+                self.ui.LineTranslate_1.setEnabled(False)   # Отключение строки ввода "Translatable"
+                print("Нету инета")                         # Принт для дебага (Того самого {Строка 114 описано})
 
+    # Функция проверки переключателя языков(ComboBox) Написано колхозно как по мне НО РАБОТАЕТ))
     def GrayLang(self):
-        idxLang1_1 = 0
-        model = self.ui.CB_Languages_2.model()
-        model.item(0).setEnabled(False)
+        idxLang1_1 = 0                          # Инициализируем переменную для подальшего использования в сравнении
+        model = self.ui.CB_Languages_2.model()  # Получаем объект QStandardItem
+        model.item(0).setEnabled(False)         # По стоку выключаем первый предмет из ComboBox(Первым есть "English")
         while True:
-            sleep(1)
-            idxLang1 = self.ui.CB_Languages_1.findText(self.ui.CB_Languages_1.currentText())  # Получаем индекс активного языка
+            sleep(1)                            # Сон на одну сек
+            # Получаем индекс активного языка
+            idxLang1 = self.ui.CB_Languages_1.findText(self.ui.CB_Languages_1.currentText())
             idxLang2 = self.ui.CB_Languages_2.findText(self.ui.CB_Languages_2.currentText())
             if idxLang1 != idxLang1_1:
-                model = self.ui.CB_Languages_2.model()  # QStandardItemModel, метод model.item возвращает объекты QStandardItem
-                model.item(0).setEnabled(True)
-                model.item(1).setEnabled(True)
-                model.item(2).setEnabled(True)
-                model.item(idxLang1).setEnabled(False)  # Указываем какие элементы сделать невыбираемыми
+                # QStandardItemModel, метод model.item возвращает объекты QStandardItem
+                model = self.ui.CB_Languages_2.model()
+                model.item(0).setEnabled(True)          # Включаем все предметы (подготавливаем их)
+                model.item(1).setEnabled(True)          # Включаем все предметы (подготавливаем их)
+                model.item(2).setEnabled(True)          # Включаем все предметы (подготавливаем их)
+                model.item(idxLang1).setEnabled(False)  # Указываем какие элементы сделать неактивными
                 if idxLang1 == idxLang2:
-                    self.ui.CB_Languages_2.setCurrentIndex(idxLang1_1)
+                    self.ui.CB_Languages_2.setCurrentIndex(idxLang1_1)  #
                 idxLang1_1 = idxLang1
 
 
