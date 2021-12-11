@@ -22,16 +22,16 @@
      <height>41</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="AllLineWord">
+   <layout class="QHBoxLayout" name="all_line_word">
     <item>
-     <widget class="QLineEdit" name="LineASKWord">
+     <widget class="QLineEdit" name="line_ask_word">
       <property name="readOnly">
        <bool>true</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="LineASKWordTrans">
+     <widget class="QLineEdit" name="line_ask_tord_trans">
       <property name="placeholderText">
        <string>Translate</string>
       </property>
@@ -50,21 +50,21 @@
    </property>
    <layout class="QHBoxLayout" name="AllButton">
     <item>
-     <widget class="QPushButton" name="PB_Cancellation">
+     <widget class="QPushButton" name="pb_cancellation">
       <property name="text">
        <string>Хз</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="PB_Verify">
+     <widget class="QPushButton" name="pb_verify">
       <property name="text">
        <string>Проверить</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="PB_Next_words">
+     <widget class="QPushButton" name="pb_next_words">
       <property name="text">
        <string>Следующий</string>
       </property>

@@ -35,17 +35,17 @@
       <height>41</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="ButtonGroup">
+    <layout class="QGridLayout" name="button_group">
      <item row="0" column="1">
-      <layout class="QGridLayout" name="LanguagesBox">
+      <layout class="QGridLayout" name="languages_box">
        <item row="1" column="2">
-        <widget class="QComboBox" name="CB_Languages_2"/>
+        <widget class="QComboBox" name="cb_languages_2"/>
        </item>
        <item row="1" column="0">
-        <widget class="QComboBox" name="CB_Languages_1"/>
+        <widget class="QComboBox" name="cb_languages_1"/>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="PB_LangSwitcher">
+        <widget class="QPushButton" name="pb_lang_switcher">
          <property name="maximumSize">
           <size>
            <width>50</width>
@@ -76,7 +76,7 @@
       </layout>
      </item>
      <item row="0" column="0">
-      <widget class="QPushButton" name="PB_ASK">
+      <widget class="QPushButton" name="pb_ask">
        <property name="maximumSize">
         <size>
          <width>120</width>
@@ -89,7 +89,7 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QPushButton" name="PB_Translate">
+      <widget class="QPushButton" name="pb_translate">
        <property name="maximumSize">
         <size>
          <width>120</width>
@@ -112,9 +112,9 @@
       <height>71</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="AllLineTranslate">
+    <layout class="QHBoxLayout" name="all_line_translate">
      <item>
-      <layout class="QGridLayout" name="GroupTranslate_1">
+      <layout class="QGridLayout" name="group_translate_1">
        <item row="0" column="0">
         <spacer name="horizontalSpacer_1_1">
          <property name="orientation">
@@ -142,7 +142,7 @@
         </spacer>
        </item>
        <item row="1" column="0" colspan="3">
-        <widget class="QLineEdit" name="LineTranslate_1">
+        <widget class="QLineEdit" name="line_translate_1">
          <property name="text">
           <string/>
          </property>
@@ -152,7 +152,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLabel" name="LabelTranslate_1">
+        <widget class="QLabel" name="label_translate_1">
          <property name="text">
           <string>Перевести</string>
          </property>
@@ -161,9 +161,9 @@
       </layout>
      </item>
      <item>
-      <layout class="QGridLayout" name="GroupTranslate_2">
+      <layout class="QGridLayout" name="group_translate_2">
        <item row="1" column="0" colspan="3">
-        <widget class="QLineEdit" name="LineTranslate_2">
+        <widget class="QLineEdit" name="line_translate_2">
          <property name="text">
           <string/>
          </property>
@@ -192,7 +192,7 @@
         </spacer>
        </item>
        <item row="0" column="1">
-        <widget class="QLabel" name="LabelTranslate_2">
+        <widget class="QLabel" name="label_translate_2">
          <property name="text">
           <string>Перевод</string>
          </property>
@@ -214,29 +214,6 @@
       </layout>
      </item>
     </layout>
-   </widget>
-   <widget class="QLabel" name="ByDeSkree">
-    <property name="geometry">
-     <rect>
-      <x>407</x>
-      <y>120</y>
-      <width>141</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>18</pointsize>
-      <weight>75</weight>
-      <italic>true</italic>
-      <bold>true</bold>
-      <underline>true</underline>
-      <kerning>true</kerning>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
