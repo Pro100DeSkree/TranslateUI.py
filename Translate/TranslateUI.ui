@@ -109,7 +109,7 @@
       <x>4</x>
       <y>5</y>
       <width>540</width>
-      <height>61</height>
+      <height>62</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="all_line_translate">
@@ -220,13 +220,13 @@
      <rect>
       <x>4</x>
       <y>107</y>
-      <width>191</width>
+      <width>207</width>
       <height>61</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="1">
-      <widget class="QSpinBox" name="time_min">
+      <widget class="QSpinBox" name="sb_time_min">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -236,9 +236,9 @@
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="QSpinBox" name="time_max">
+      <widget class="QSpinBox" name="sb_time_max">
        <property name="minimum">
-        <number>2</number>
+        <number>10</number>
        </property>
        <property name="maximum">
         <number>60</number>
@@ -324,7 +324,7 @@
      <item row="0" column="0" colspan="5">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Случайное время вопроса</string>
+        <string>Случайное время вопроса:</string>
        </property>
       </widget>
      </item>

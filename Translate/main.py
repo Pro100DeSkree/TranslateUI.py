@@ -1,4 +1,5 @@
-from PyQt5 import QtWidgets, QtCore, Qt      # Импортируем Qt5
+from PyQt5 import QtWidgets, QtCore      # Импортируем Qt5
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import *
 from TranslateUI import Ui_TranslateAPP      # Импорт Главного интерфейса
 from ASKWin import Ui_ASKDialogWin           # Импорт Диалогового интерфейса(ASK)
@@ -6,10 +7,10 @@ from googletrans import Translator           # Импортируем гугл �
 from fuzzywuzzy import process as fuzz_p     # Импортируем модуль нечёткого сравнения
 from fuzzywuzzy import fuzz                  # Импортируем модуль нечёткого сравнения
 from threading import Thread                 # Импортируем модуль многопоточности
+from time import sleep                       # Импортируем модуль сна
 import random as rd                          # Импортируем модуль рандом
 import sys                                   # Импортируем модуль system
 import http.client as httplib                # Импортируем модуль (Хз что за моуль) для порверки подключения к сети
-from time import sleep                       # Импортируем модуль сна
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -17,21 +18,24 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
+        close_dialog = pyqtSignal()     # РОЗОБРАТСЬЯ с этим в GGG.py (Закрытие диалогового окна)
         self.translator = Translator()
         self.ui = Ui_TranslateAPP()
         self.ui.setupUi(self)
         self.ui.line_translate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.line_translate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
         self.ui.pb_translate.clicked.connect(self.check_lang_boxes)     # При нажатии кнопки "Перевод" вызываем функцию
-        self.ui.pb_ask.clicked.connect(self.ask_clicked)                # При нажатии кнопки "Спросить" вызываем функцию
+        self.ui.pb_ask.clicked.connect(self.ask_translate_words)        # При нажатии кнопки "Спросить" вызываем функцию
         self.ui.pb_lang_switcher.clicked.connect(self.lang_switch)             # Кнопка смены языка
         self.ui.cb_languages_1.addItems(["English", "Russian", "Ukraine"])     # Задаём список языков в QComboBox1
         self.ui.cb_languages_2.addItems(["English", "Russian", "Ukraine"])     # Задаём список языков в QComboBox2
         self.ui.cb_languages_2.setCurrentIndex(1)                              # Устанавливаем язык в ComboBox
         th_ch_internet = Thread(target=self.thread_internet_check, args=(), daemon=True)  # Создаём новый поток
-        th_ch_gray_lang = Thread(target=self.gray_lang, args=(), daemon=True)             # Создаём ещё один новый поток
-        th_ch_gray_lang.start()                     # Запускаем поток проверки ComboBox-ов на смену языков
-        th_ch_internet.start()                      # Запускаме поток проверки подключения к интернету
+        th_ch_gray_lang = Thread(target=self.thread_gray_lang, args=(), daemon=True)      # Создаём новый поток
+        th_rand_ask = Thread(target=self.thread_random_ask, args=(), daemon=True)         # Создаём новый поток 
+        th_rand_ask.start()                  # Запускаем поток роботы с вопросами (Функция thread_random_ask)
+        th_ch_gray_lang.start()              # Запускаем поток проверки ComboBox-ов на смену языков
+        th_ch_internet.start()               # Запускаме поток проверки подключения к интернету
 
     # Function
     def translate(self, lang1, lang2):                                          # Функция реагирования на клик
@@ -69,7 +73,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.translate(lang1_1, lang1_2)           # Вызываем функцию с параметрами языков
 
     @staticmethod
-    def ask_clicked():
+    def ask_translate_words():
         cust = DialogWinASK()                      # Вызов класса диалогового окна
         if cust.exec_():                           # Честно, хз что это и зачем))) Пусть будет))
             print('get')
@@ -100,16 +104,10 @@ class MainWindow(QtWidgets.QMainWindow):
             if fuzz_coef[1] < 100:                       # Если не нашлось похожих слов то записываем
                 BD_Word.write(write_word)                # Записываем слово в словарь
 
-    # Нужно доработать эту функцию либо удалить к ххх
-    def mousePressEvent(self, event):
-        button = event.button()
-        self.GrayLang()
-        if button == Qt.Qt.RightButton:
-            print("Right button click!")
-
-        elif button == Qt.Qt.LeftButton:
-            print("Left button click!")
-        # return Qt.QPushButton.mousePressEvent(self, event)
+    def spin_boxes_value(self):
+        ask_time_min = self.ui.sb_time_min.value()
+        ask_time_max = self.ui.sb_time_max.value()
+        return [ask_time_min, ask_time_max]
 
     # МНОГОПОТОЧНЫЕ ФУНКИИ
     # Функция проверки интернета     !!!ЕСТЬ БАГ!!! При восстановлении подключения иногда УИ может зависнуть намертво
@@ -126,7 +124,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 print("Нету инета")                         # Принт для дебага (Того самого {Строка 114 описано})
 
     # Функция проверки переключателя языков(ComboBox) Написано колхозно как по мне НО РАБОТАЕТ))
-    def gray_lang(self):
+    def thread_gray_lang(self):
         idx_lang1_1 = 0                         # Инициализируем переменную для подальшего использования в сравнении
         model = self.ui.cb_languages_2.model()  # Получаем объект QStandardItem
         model.item(0).setEnabled(False)         # По стоку выключаем первый предмет из ComboBox(Первым есть "English")
@@ -145,6 +143,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 if idx_lang1 == idx_lang2:
                     self.ui.cb_languages_2.setCurrentIndex(idx_lang1_1)  #
                 idx_lang1_1 = idx_lang1
+
+    # Нужно как то переделать это всё (При истичению таймера и открытии окна лезит куча "Ошибок" Не критично но....)
+    def thread_random_ask(self):
+        while True:
+            spin_box_min_max = self.spin_boxes_value()
+            time_interval_ask = rd.randint(spin_box_min_max[0], spin_box_min_max[1])
+            time_interval_ask = time_interval_ask * 60
+            print(time_interval_ask)
+            sleep(time_interval_ask)
+            cust = DialogWinASK()
+            if cust.exec_():
+                print('get')
+            # print("прошло ", time_interval_ask, " сек")
 
 
 class DialogWinASK(QDialog):
