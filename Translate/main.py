@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets, QtCore      # Импортируем Qt5
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QIcon
 from TranslateUI import Ui_TranslateAPP      # Импорт Главного интерфейса
 from ASKWin import Ui_ASKDialogWin           # Импорт Диалогового интерфейса(ASK)
 from googletrans import Translator           # Импортируем гугл переводчик
@@ -22,6 +23,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.translator = Translator()
         self.ui = Ui_TranslateAPP()
         self.ui.setupUi(self)
+        self.setWindowIcon(QIcon('IconApp.png'))
         self.ui.line_translate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.line_translate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
         self.ui.pb_translate.clicked.connect(self.check_lang_boxes)     # При нажатии кнопки "Перевод" вызываем функцию
