@@ -191,16 +191,14 @@ class DialogWinASK(QDialog):
         print(fuzz_coef)
         try:                                               # Отлов ошибки пустой QEditLine
             if fuzz_coef >= 90:                            # Если коэф. схожести слов >= 90
-                # self.lb_indicator.setText("Верно")
-                print("Слово совпадает")
-            else:                                          # Иначе ...
-                # self.lb_indicator.setText("Неверно")
-                print("Слово не совпадает")
+                self.ASKui.lb_indicator.setText("Верно")
+                sleep(2)
+                self.ASKui.line_ask_tord_trans.setText("")  # Очищаем строку ввода перевода
+                self.rand_translate_words()                 # Вызываем функцию для выбора случайного слова
+            else:                                           # Иначе ...
+                self.ASKui.lb_indicator.setText("Неверно")
         except TypeError:
             self.ASKui.line_ask_tord_trans.setPlaceholderText("Введите перевод!!!")     # Если стройка ввода была пустой
-        sleep(2)
-        self.ASKui.line_ask_tord_trans.setText("")         # Очищаем строку ввода перевода
-        self.rand_translate_words()                        # Вызываем функцию для выбора случайного слова
 
     def keyPressEvent(self, event):                             # Функция чтения клавишь
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем что нажато
