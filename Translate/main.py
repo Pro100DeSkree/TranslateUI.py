@@ -24,6 +24,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_TranslateAPP()
         self.ui.setupUi(self)
         self.setWindowIcon(QIcon('IconApp.png'))
+
         self.ui.line_translate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.line_translate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
         self.ui.pb_translate.clicked.connect(self.check_lang_boxes)     # При нажатии кнопки "Перевод" вызываем функцию
@@ -125,7 +126,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.line_translate_1.setEnabled(False)  # Отключение строки ввода "Translatable"
                 print("Нету инета")                         # Принт для дебага (Того самого {Строка 114 описано})
 
-    # Функция проверки переключателя языков(ComboBox) Написано колхозно как по мне НО РАБОТАЕТ))
+    # Функция проверки переключателя языков(ComboBox) Написано колхозно как по мне, НО РАБОТАЕТ))
     def thread_gray_lang(self):
         idx_lang1_1 = 0                         # Инициализируем переменную для подальшего использования в сравнении
         model = self.ui.cb_languages_2.model()  # Получаем объект QStandardItem
@@ -167,16 +168,20 @@ class DialogWinASK(QDialog):
 
         self.ASKui = Ui_ASKDialogWin()
         self.ASKui.setupUi(self)
-
-        list_words = []
+        self.ASKui.pb_verify.clicked.connect(self.check_trans_word)
+        self.list_words = []
 
         with open('BD_Word.txt', mode="r") as BD_Word:  # Открываем файл на чтение
-            for line in BD_Word.readlines():            # Читаем файл построчно
-                list_words.append(line)                 # Записываем слова в список
-        rand_word = list_words[rd.randint(0, len(list_words))]       # Выбераем рандомное слово из списка
+            for line in BD_Word.readlines():  # Читаем файл построчно
+                self.list_words.append(line)  # Записываем слова в список
+
+        self.rand_translate_words()
+
+    def rand_translate_words(self):
+        rand_word = self.list_words[rd.randint(0, len(self.list_words))]       # Выбераем рандомное слово из списка
         word = rand_word.partition(' --> ')[-3]            # Убераем вторую половину слова (Перевод)
-        word1 = rand_word.partition(' --> ')[2]       # Убираем первую чась
-        self.word1 = word1[:-1]                       # Убираем из слова "\n"
+        word1 = rand_word.partition(' --> ')[2]         # Убираем первую чась
+        self.word1 = word1[:-1]                              # Убираем из слова "\n"
         self.ASKui.line_ask_word.setText(word)             # Вписываем слово в QEditLine
 
     def check_trans_word(self):                            # Проверка правельности перевода
@@ -186,15 +191,22 @@ class DialogWinASK(QDialog):
         print(fuzz_coef)
         try:                                               # Отлов ошибки пустой QEditLine
             if fuzz_coef >= 90:                            # Если коэф. схожести слов >= 90
+                # self.lb_indicator.setText("Верно")
                 print("Слово совпадает")
             else:                                          # Иначе ...
+                # self.lb_indicator.setText("Неверно")
                 print("Слово не совпадает")
         except TypeError:
             self.ASKui.line_ask_tord_trans.setPlaceholderText("Введите перевод!!!")     # Если стройка ввода была пустой
+        sleep(2)
+        self.ASKui.line_ask_tord_trans.setText("")         # Очищаем строку ввода перевода
+        self.rand_translate_words()                        # Вызываем функцию для выбора случайного слова
 
-    def keyPressEvent(self, event):                             # Функция чтения клавишь Return & Enter
-        if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем нажатие клавишь
+    def keyPressEvent(self, event):                             # Функция чтения клавишь
+        if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем что нажато
             self.check_trans_word()                             # Вызов функции проверки перевода
+        elif event.key() == QtCore.Qt.Key_Escape:               # Проверяем что нажато
+            self.close()                                        # Если ESC то закрываем окошко
 
 
 if __name__ == "__main__":

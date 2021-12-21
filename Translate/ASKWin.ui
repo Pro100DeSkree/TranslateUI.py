@@ -6,69 +6,113 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>376</width>
-    <height>104</height>
+    <width>393</width>
+    <height>131</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="horizontalLayoutWidget">
+  <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>2</y>
-     <width>291</width>
-     <height>41</height>
+     <x>1</x>
+     <y>5</y>
+     <width>391</width>
+     <height>121</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="all_line_word">
-    <item>
-     <widget class="QLineEdit" name="line_ask_word">
-      <property name="readOnly">
-       <bool>true</bool>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="line_ask_tord_trans">
-      <property name="placeholderText">
-       <string>Translate</string>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
       </property>
-     </widget>
+     </spacer>
     </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget_2">
-   <property name="geometry">
-    <rect>
-     <x>7</x>
-     <y>57</y>
-     <width>361</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="AllButton">
-    <item>
-     <widget class="QPushButton" name="pb_cancellation">
+    <item row="1" column="1">
+     <widget class="QLabel" name="lb_indicator">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>15</pointsize>
+        <weight>75</weight>
+        <italic>false</italic>
+        <bold>true</bold>
+       </font>
+      </property>
       <property name="text">
-       <string>Хз</string>
+       <string/>
       </property>
      </widget>
     </item>
-    <item>
-     <widget class="QPushButton" name="pb_verify">
-      <property name="text">
-       <string>Проверить</string>
+    <item row="1" column="2">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-     </widget>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
-    <item>
-     <widget class="QPushButton" name="pb_next_words">
-      <property name="text">
-       <string>Следующий</string>
+    <item row="0" column="0" colspan="3">
+     <layout class="QHBoxLayout" name="all_line_word">
+      <property name="spacing">
+       <number>6</number>
       </property>
-     </widget>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="line_ask_word">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="line_ask_tord_trans">
+        <property name="placeholderText">
+         <string>Translate</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="0" colspan="3">
+     <layout class="QHBoxLayout" name="AllButton">
+      <item>
+       <widget class="QPushButton" name="pb_verify">
+        <property name="maximumSize">
+         <size>
+          <width>160</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Проверить</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
