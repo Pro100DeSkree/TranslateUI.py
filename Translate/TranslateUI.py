@@ -170,6 +170,9 @@ class Ui_TranslateAPP(object):
         self.lb_timer.setText("")
         self.lb_timer.setObjectName("lb_timer")
         self.gridLayout.addWidget(self.lb_timer, 1, 4, 1, 1)
+        self.pb_del_translate = QtWidgets.QPushButton(self.settings_tab)
+        self.pb_del_translate.setGeometry(QtCore.QRect(260, 10, 88, 34))
+        self.pb_del_translate.setObjectName("pb_del_translate")
         self.tab_app.addTab(self.settings_tab, "")
         TranslateAPP.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(TranslateAPP)
@@ -177,7 +180,7 @@ class Ui_TranslateAPP(object):
         TranslateAPP.setStatusBar(self.statusbar)
 
         self.retranslateUi(TranslateAPP)
-        self.tab_app.setCurrentIndex(1)
+        self.tab_app.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(TranslateAPP)
 
     def retranslateUi(self, TranslateAPP):
@@ -196,4 +199,5 @@ class Ui_TranslateAPP(object):
         self.label_4.setText(_translate("TranslateAPP", "Мин"))
         self.cb_rand_ask.setText(_translate("TranslateAPP", "Переодически спрашивать"))
         self.label_3.setText(_translate("TranslateAPP", "Случайное время вопроса:"))
+        self.pb_del_translate.setText(_translate("TranslateAPP", "Удаление"))
         self.tab_app.setTabText(self.tab_app.indexOf(self.settings_tab), _translate("TranslateAPP", "Налаштуйкы"))
