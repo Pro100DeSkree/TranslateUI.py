@@ -17,12 +17,12 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        close_dialog = pyqtSignal()     # РОЗОБРАТСЬЯ с этим в GGG.py (Закрытие диалогового окна)
         self.translator = Translator()
         self.ui = Ui_TranslateAPP()
         self.ui.setupUi(self)
         self.setWindowIcon(QIcon('IconApp.png'))
 
+        self.ui.cb_rand_ask.setChecked(True)                            # По умолчанию флаг включён
         self.ui.line_translate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.line_translate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
         self.ui.pb_translate.clicked.connect(self.check_lang_boxes)     # При нажатии кнопки "Перевод" вызываем функцию
@@ -148,15 +148,23 @@ class MainWindow(QtWidgets.QMainWindow):
     # Нужно как то переделать это всё (При истичению таймера и открытии окна лезит куча "Ошибок" Не критично но....)
     def thread_random_ask(self):
         while True:
-            spin_box_min_max = self.spin_boxes_value()
-            time_interval_ask = rd.randint(spin_box_min_max[0], spin_box_min_max[1])
-            time_interval_ask = time_interval_ask * 60
-            print(time_interval_ask)
-            sleep(time_interval_ask)
-            cust = DialogWinASK()
-            if cust.exec_():
-                print('get')
-            # print("прошло ", time_interval_ask, " сек")
+            global flag
+            if self.ui.cb_rand_ask.isChecked():
+                spin_box_min_max = self.spin_boxes_value()          # Получаем значения из спинбоксов
+                time_interval_ask = rd.randint(spin_box_min_max[0], spin_box_min_max[1])
+                time_interval_ask = time_interval_ask * 60          # Переводим значение с мин в сек
+                for i in range(time_interval_ask):                  # Таймер сделан через for для прирывания sleep
+                    time_interval = time_interval_ask - i           # От основного времени отнимаем i(Обратный отсчёт)
+                    self.ui.lb_timer.setText(str(time_interval))    # Переводим в str и изменяем значение Qlabel
+                    sleep(1)
+                    flag = self.ui.cb_rand_ask.isChecked()          # Получаем значение QCheckBox (ЧБ)
+                    if flag != 1:                                   # Если чекбокс выключен то прирываем for
+                        self.ui.lb_timer.setText("--")              # Сбрасываем счётчик "таймера"
+                        break                                       # Прирываем цыкл for
+                if flag:                    # Если ЧБ true то запускаем окно
+                    cust = DialogWinASK()
+                    if cust.exec_():
+                        print('get')
 
 
 class DialogWinASK(QDialog):
@@ -166,6 +174,7 @@ class DialogWinASK(QDialog):
 
         self.ASKui = Ui_ASKDialogWin()
         self.ASKui.setupUi(self)
+        self.setWindowIcon(QIcon('ICON-ASK-win.png'))
         self.ASKui.lb_indicator.setAlignment(Qt.AlignCenter)
         self.ASKui.pb_verify.clicked.connect(self.check_trans_word)
         self.ASKui.pb_show.clicked.connect(self.show_word)
