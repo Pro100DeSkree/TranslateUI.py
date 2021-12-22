@@ -1,7 +1,5 @@
 from PyQt5 import QtWidgets, QtCore      # Импортируем Qt5
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QIcon
+from PyQt5.Qt import *
 from TranslateUI import Ui_TranslateAPP      # Импорт Главного интерфейса
 from ASKWin import Ui_ASKDialogWin           # Импорт Диалогового интерфейса(ASK)
 from googletrans import Translator           # Импортируем гугл переводчик
@@ -168,7 +166,9 @@ class DialogWinASK(QDialog):
 
         self.ASKui = Ui_ASKDialogWin()
         self.ASKui.setupUi(self)
+        self.ASKui.lb_indicator.setAlignment(Qt.AlignCenter)
         self.ASKui.pb_verify.clicked.connect(self.check_trans_word)
+        self.ASKui.pb_show.clicked.connect(self.show_word)
         self.list_words = []
 
         with open('BD_Word.txt', mode="r") as BD_Word:  # Открываем файл на чтение
@@ -178,11 +178,14 @@ class DialogWinASK(QDialog):
         self.rand_translate_words()
 
     def rand_translate_words(self):
-        rand_word = self.list_words[rd.randint(0, len(self.list_words))]       # Выбераем рандомное слово из списка
-        word = rand_word.partition(' --> ')[-3]            # Убераем вторую половину слова (Перевод)
-        word1 = rand_word.partition(' --> ')[2]         # Убираем первую чась
-        self.word1 = word1[:-1]                              # Убираем из слова "\n"
-        self.ASKui.line_ask_word.setText(word)             # Вписываем слово в QEditLine
+        try:
+            rand_word = self.list_words[rd.randint(0, len(self.list_words))]       # Выбераем рандомное слово из списка
+            word = rand_word.partition(' --> ')[-3]            # Убераем вторую половину слова (Перевод)
+            word1 = rand_word.partition(' --> ')[2]         # Убираем первую чась
+            self.word1 = word1[:-1]                              # Убираем из слова "\n"
+            self.ASKui.line_ask_word.setText(word)             # Вписываем слово в QEditLine
+        except IndexError:
+            self.rand_translate_words()
 
     def check_trans_word(self):                            # Проверка правельности перевода
         translate = self.ASKui.line_ask_tord_trans.text()  # Записываем в переменную перевод который вписали в QEditLine
@@ -192,13 +195,20 @@ class DialogWinASK(QDialog):
         try:                                               # Отлов ошибки пустой QEditLine
             if fuzz_coef >= 90:                            # Если коэф. схожести слов >= 90
                 self.ASKui.lb_indicator.setText("Верно")
+                self.ASKui.lb_indicator.setStyleSheet("QLabel { color: %s}" % 'green')
                 sleep(2)
                 self.ASKui.line_ask_tord_trans.setText("")  # Очищаем строку ввода перевода
                 self.rand_translate_words()                 # Вызываем функцию для выбора случайного слова
             else:                                           # Иначе ...
                 self.ASKui.lb_indicator.setText("Неверно")
+                self.ASKui.lb_indicator.setStyleSheet("QLabel { color: %s}" % 'red')
         except TypeError:
             self.ASKui.line_ask_tord_trans.setPlaceholderText("Введите перевод!!!")     # Если стройка ввода была пустой
+
+    def show_word(self):
+        self.ASKui.line_ask_tord_trans.setText(self.word1)
+        self.ASKui.lb_indicator.setText("Подсказка")
+        self.ASKui.lb_indicator.setStyleSheet("QLabel { color: %s}" % 'yellow')
 
     def keyPressEvent(self, event):                             # Функция чтения клавишь
         if event.key() == QtCore.Qt.Key_Return or event.key() == QtCore.Qt.Key_Enter:   # Проверяем что нажато
