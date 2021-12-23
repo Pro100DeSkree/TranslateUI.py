@@ -1,0 +1,17 @@
+Hello --> Привет
+Help --> Помощь
+Hi --> Привет
+Main --> Главный
+Good --> Хорошо
+English --> английский
+Digital --> Цифровой
+Key --> Ключ
+Traceback --> Проследить
+Icon --> Значок
+Theme --> Тема
+Settings --> Настройки
+Russian --> русский
+Ukrain --> Украина
+Speack --> Разговаривать
+Speaker --> Оратор
+Clear --> Прозрачный
