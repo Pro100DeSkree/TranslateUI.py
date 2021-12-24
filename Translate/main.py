@@ -151,12 +151,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.setWindowIcon(QIcon('IconApp.png'))
 
-        self.frame_geometry = None  # !!!
-
         self.ui.cb_rand_ask.setChecked(True)                            # По умолчанию флаг включён
+        self.ui.line_translate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
+        self.ui.line_translate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
         self.ui.pb_translate.clicked.connect(self.check_lang_boxes)     # При нажатии кнопки "Перевод" вызываем функцию
         self.ui.pb_ask.clicked.connect(self.ask_translate_words)        # При нажатии кнопки "Спросить" вызываем функцию
-        self.ui.tab_app.tabBarClicked.connect(self.set_window_size)
         self.ui.pb_del_translate.clicked.connect(self.table_view)
         self.ui.pb_lang_switcher.clicked.connect(self.lang_switch)             # Кнопка смены языка
         self.ui.cb_languages_1.addItems(["English", "Russian", "Ukraine"])     # Задаём список языков в QComboBox1
@@ -172,22 +171,17 @@ class MainWindow(QtWidgets.QMainWindow):
     # Function
     def translate(self, lang1, lang2):                                          # Функция реагирования на клик
         word = self.ui.line_translate_1.text()                                  # Вывод содержимого поля 1
-        if word == "lol":
-            print("Сработал lol")
-        elif word == "kek":
-            print("Сработал kek")
-        else:
-            try:
-                translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
-                translate_text = translate.text                                     # Получаем слово с перевода
-                self.ui.line_translate_2.setText(translate_text)                    # Вывод перевода
+        try:
+            translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
+            translate_text = translate.text                                     # Получаем слово с перевода
+            self.ui.line_translate_2.setText(translate_text)                    # Вывод перевода
 
-                if lang1 != 'uk' and lang2 != 'uk':
-                    if word != translate_text:
-                        self.write_w(word, translate_text)
+            if lang1 != 'uk' and lang2 != 'uk':
+                if word != translate_text:
+                    self.write_w(word, translate_text)
 
-            except TypeError:
-                self.ui.line_translate_1.setPlaceholderText("Введите слово!!!")
+        except TypeError:
+            self.ui.line_translate_1.setPlaceholderText("Введите слово!!!")
 
     def check_lang_boxes(self):                                    # Функция чтения с ComboBox и передачей в translate()
         lang1 = self.ui.cb_languages_1.currentText()               # Получаем значение с ComboBox
@@ -208,53 +202,6 @@ class MainWindow(QtWidgets.QMainWindow):
             lang1_2 = 'uk'
 
         self.translate(lang1_1, lang1_2)           # Вызываем функцию с параметрами языков
-
-    def set_window_size(self, index):
-        if index == 0:
-            self.ui.tab_app.setMaximumSize(661, 151)
-            pos_size_win = self.pos_win()
-            pos_x = int(pos_size_win[0])
-            pos_y = int(pos_size_win[1])
-            size_x = int(pos_size_win[2])
-            size_y = int(pos_size_win[3])
-            # print(size_x, "\n", size_y, "\n")
-            # print(pos_x, "\n", pos_y, "\n\n")
-            application.setGeometry(pos_x + 4, pos_y + 26, 661, 175)
-        elif index == 1:
-            self.ui.tab_app.setMaximumSize(661, 341)
-            pos_size_win = self.pos_win()
-            pos_x = int(pos_size_win[0])
-            pos_y = int(pos_size_win[1])
-            size_x = int(pos_size_win[2])
-            size_y = int(pos_size_win[3])
-            # print(size_x, "\n", size_y, "\n")
-            # print(pos_x, "\n", pos_y, "\n\n")
-            application.setGeometry(pos_x + 4, pos_y + 26, 661, 364)
-        elif index == 2:
-            print("3")
-            pass
-
-    def pos_win(self):
-        if self.frame_geometry != self.frameGeometry():
-            self.frame_geometry = self.frameGeometry()
-            self.frame_geometry = str(self.frame_geometry)
-            # Достаём все 4-ре значения
-            frame_geometry = self.frame_geometry.partition('(')[2]
-            frame_geometry = frame_geometry.partition(')')[-3]
-            # Достаём позицыю окна(Х)
-            frame_pos_x = frame_geometry.partition(',')[-3]
-            # Достаём позицыю окна(Y)
-            frame_geometry = frame_geometry.partition(' ')[2]
-            frame_pos_y = frame_geometry.partition(',')[-3]
-            # Достаём размер окна(X)
-            frame_geometry = frame_geometry.partition(' ')[2]
-            frame_geometry_x = frame_geometry.partition(',')[-3]
-            # Достаём размер окна(Y)
-            frame_geometry = frame_geometry.partition(' ')[2]
-            frame_geometry_y = frame_geometry.partition(',')[-3]
-
-            return [frame_pos_x, frame_pos_y, frame_geometry_x, frame_geometry_y]
-
 
     @staticmethod
     def ask_translate_words():
@@ -280,10 +227,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if list_words:
             fuzz_coef = fuzz_p.extractOne(write_word, list_words)  # Выполняем нечёткое сравнение слов
-            if fuzz_coef[1] < 100:                                 # Если не нашлось похожих слов то записываем
-                self.addit_rec_bd_word(write_word)                 # Передаём данные в функцию записи
+            if fuzz_coef[1] < 100:  # Если не нашлось похожих слов то записываем
+                self.addit_rec_bd_word(write_word)
         else:
-            self.addit_rec_bd_word(write_word)                     # Передаём данные в функцию записи
+            self.addit_rec_bd_word(write_word)
 
     def reed_bd_word(self):
         list_words = []
