@@ -62,7 +62,11 @@ class DialogWitTable(QDialog):
 
     def delete_line(self, line):            # Функция удаления елементов
         line = line.partition("DEL ")[2]    # Фильтруем строку получая индекс кнопки(А значит и строки елемента)
-        self.dict_w.pop(int(line))          # Удаляем елемент по индексу
+        try:
+            self.dict_w.pop(int(line))          # Удаляем елемент по индексу
+        except IndexError:
+            print("Сработала ошибка удаления елемента. ПОСЛЕДНИЙ УДАЛЯЕМЫЙ ЕЛЕМЕНТ НЕ УДАЛЁН")
+            self.write_bd_dict()
 
     def write_bd_dict(self):                            # Функция записи БД
         with open("BD_Word.txt", 'w') as BD_Word:       # Открываем файл на дозапись
@@ -151,9 +155,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.setWindowIcon(QIcon('IconApp.png'))
 
-        self.ui.cb_rand_ask.setChecked(True)                            # По умолчанию флаг включён
-        self.ui.line_translate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
-        self.ui.line_translate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
+        self.ui.cb_rand_ask.setChecked(True)                            # По умолчанию флаг включён (Галочка)
         self.ui.pb_translate.clicked.connect(self.check_lang_boxes)     # При нажатии кнопки "Перевод" вызываем функцию
         self.ui.pb_ask.clicked.connect(self.ask_translate_words)        # При нажатии кнопки "Спросить" вызываем функцию
         self.ui.pb_del_translate.clicked.connect(self.table_view)
@@ -170,18 +172,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # Function
     def translate(self, lang1, lang2):                                          # Функция реагирования на клик
-        word = self.ui.line_translate_1.text()                                  # Вывод содержимого поля 1
+        word = self.ui.te_translate_1.toPlainText()                             # Получание содержимого поля 1
+
         try:
             translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
             translate_text = translate.text                                     # Получаем слово с перевода
-            self.ui.line_translate_2.setText(translate_text)                    # Вывод перевода
+            self.ui.te_translate_2.setText(translate_text)                    # Вывод перевода
 
             if lang1 != 'uk' and lang2 != 'uk':
                 if word != translate_text:
                     self.write_w(word, translate_text)
 
         except TypeError:
-            self.ui.line_translate_1.setPlaceholderText("Введите слово!!!")
+            self.ui.te_translate_1.setPlaceholderText("Введите слово!!!")
 
     def check_lang_boxes(self):                                    # Функция чтения с ComboBox и передачей в translate()
         lang1 = self.ui.cb_languages_1.currentText()               # Получаем значение с ComboBox
@@ -223,6 +226,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def write_w(self, word, translate_text):                 # Функция чтения\записи переведённых слов
         list_words = self.reed_bd_word()
+        word = word.partition('\n')[-3]                   # Убираем из слова "\n"
         write_word = word + " --> " + translate_text + "\n"  # Склеиваем слова для записи (Перевести --> Перевод \n)
 
         if list_words:
@@ -264,10 +268,10 @@ class MainWindow(QtWidgets.QMainWindow):
             conn = httplib.HTTPConnection("www.google.com")
             try:
                 conn.request("HEAD", "/")
-                self.ui.line_translate_1.setEnabled(True)   # Обратное включение строки ввода "Translatable"
+                self.ui.te_translate_1.setEnabled(True)   # Обратное включение строки ввода "Translatable"
                 # print("Есть инте")                          # Принт для дебага (Того самого {Строка 114 описано})
             except None:
-                self.ui.line_translate_1.setEnabled(False)  # Отключение строки ввода "Translatable"
+                self.ui.te_translate_1.setEnabled(False)  # Отключение строки ввода "Translatable"
                 print("Нету инета")                         # Принт для дебага (Того самого {Строка 114 описано})
 
     # Функция проверки переключателя языков(ComboBox) Написано колхозно как по мне, НО РАБОТАЕТ))
