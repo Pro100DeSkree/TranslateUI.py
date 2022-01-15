@@ -172,7 +172,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def translate(self, lang1, lang2):                                          # Функция реагирования на клик
         word = self.ui.line_translate_1.text()                                  # Вывод содержимого поля 1
         try:
+            # Проблемы с библиотекой гугл переводчика
             translate = self.translator.translate(word, src=lang1, dest=lang2)  # Перевод
+            # Проблемы с библиотекой гугл переводчика
             translate_text = translate.text                                     # Получаем слово с перевода
             self.ui.line_translate_2.setText(translate_text)                    # Вывод перевода
 
