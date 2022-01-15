@@ -146,11 +146,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
 
-        self.translator = Translator()
         self.ui = Ui_TranslateAPP()
         self.ui.setupUi(self)
         self.setWindowIcon(QIcon('IconApp.png'))
 
+        self.translator = Translator()
         self.ui.cb_rand_ask.setChecked(True)                            # По умолчанию флаг включён
         self.ui.line_translate_1.setMaxLength(34)                       # Ограничение символов в поле ввода 1
         self.ui.line_translate_2.setMaxLength(34)                       # Ограничение символов в поле ввода 2
