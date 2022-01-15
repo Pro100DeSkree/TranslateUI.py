@@ -66,3 +66,6 @@ class Ui_ASKDialogWin(object):
         self.pb_show.setText(_translate("ASKDialogWin", "Узнать перевод"))
         self.pb_verify.setText(_translate("ASKDialogWin", "Проверить"))
         self.line_ask_tord_trans.setPlaceholderText(_translate("ASKDialogWin", "Translate"))
+
+# Made by DeSkreeツ
+# :)

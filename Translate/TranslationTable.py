@@ -78,3 +78,6 @@ class Ui_TranslationTable(object):
         item.setText(_translate("TranslationTable", "DELETE"))
         self.pb_ok_del.setText(_translate("TranslationTable", "Ок"))
         self.pb_cancel.setText(_translate("TranslationTable", "Отмена"))
+
+# Made by DeSkreeツ
+# :)
